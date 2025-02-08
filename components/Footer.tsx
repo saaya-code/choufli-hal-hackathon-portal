@@ -12,7 +12,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">About GDG</h3>
+            <h3 className="font-semibold text-lg text-primary">About GDG</h3>
             <p className="text-gray-600 text-sm">
               Google Developer Groups is a community of developers who are
               interested in Google&apos;s developer technology.
@@ -20,7 +20,9 @@ export default function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">About Choufli Hal 2.0</h3>
+            <h3 className="font-semibold text-lg text-primary">
+              About Choufli Hal 2.0
+            </h3>
             <p className="text-gray-600 text-sm">
               Choufli Hal 2.0 is a hackathon event organized by GDG ISSATSo that
               aims to blend tradition with modern technology.
@@ -28,7 +30,7 @@ export default function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Contact</h3>
+            <h3 className="font-semibold text-lg text-primary">Contact</h3>
             <ul className="space-y-2 text-sm">
               <li className="text-gray-600">ISSAT Sousse</li>
               <li className="text-gray-600">Tunisia</li>
@@ -52,7 +54,7 @@ export default function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Follow Us</h3>
+            <h3 className="font-semibold text-lg text-primary">Follow Us</h3>
             <div className="flex space-x-4">
               <a
                 href="https://www.facebook.com/gdgoc.issatso"
