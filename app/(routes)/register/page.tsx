@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useActionState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -9,17 +9,19 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { registerTeam } from "@/app/actions/teamActions"
 
-// Define the schema for each team member
+// Schema definitions
 const teamMemberSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   email: z.string().email("Invalid email address."),
   phone: z.string().min(8, "Phone number must be at least 8 characters."),
 })
 
-// Define the schema for the entire form
 const formSchema = z.object({
   teamName: z.string().min(2, "Team name must be at least 2 characters."),
   teamSize: z.string(),
@@ -27,9 +29,36 @@ const formSchema = z.object({
   teamMembers: z.array(teamMemberSchema),
 })
 
+// Submit Button Component with loading state
+function SubmitButton({pending}: {pending: boolean}) {
+
+  
+  return (
+    <Button type="submit" className="ml-auto" disabled={pending}>
+      {pending ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Submitting...
+        </>
+      ) : (
+        "Submit Registration"
+      )}
+    </Button>
+  )
+}
+
+const initialState = {
+  message: "",
+  error: "",
+}
+
 export default function RegisterPage() {
   const [step, setStep] = useState(1)
   const totalSteps = 3
+  const { toast } = useToast()
+  const router = useRouter()
+
+  const [state, formAction, pending] = useActionState(registerTeam, initialState)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,11 +72,41 @@ export default function RegisterPage() {
 
   const teamSize = Number.parseInt(form.watch("teamSize") || "1")
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
-    // Here you would typically send the data to your backend
-    alert("Registration submitted successfully!")
-  }
+  // Handle form state changes
+  useEffect(() => {
+    if (state?.message && !state.error) {
+      toast({
+        title: "Success!",
+        description: state.message,
+      })
+      setTimeout(() => {
+        router.push("/")
+      }, 1500)
+    }
+
+    if (state?.error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: state.error,
+      })
+    }
+  }, [state, toast, router])
+
+  // Watch teamSize changes to update form fields
+  useEffect(() => {
+    const currentTeamMembers = form.getValues("teamMembers")
+    if (teamSize > currentTeamMembers.length) {
+      const newMembers = Array.from({ length: teamSize - currentTeamMembers.length }, () => ({
+        name: "",
+        email: "",
+        phone: "",
+      }))
+      form.setValue("teamMembers", [...currentTeamMembers, ...newMembers])
+    } else if (teamSize < currentTeamMembers.length) {
+      form.setValue("teamMembers", currentTeamMembers.slice(0, teamSize))
+    }
+  }, [teamSize, form])
 
   const nextStep = async () => {
     const fields =
@@ -66,6 +125,20 @@ export default function RegisterPage() {
   }
 
   const prevStep = () => setStep(Math.max(step - 1, 1))
+
+  async function submitForm(formData: FormData) {
+    const values = form.getValues()
+    Object.entries(values).forEach(([key, value]) => {
+      if (key === "teamMembers") {
+        formData.append(key, JSON.stringify(value))
+      } else {
+        formData.append(key, value as string)
+      }
+    })
+    
+    const result = await formAction(formData)
+    return result
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background py-20">
@@ -94,7 +167,7 @@ export default function RegisterPage() {
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form action={submitForm} className="space-y-8">
               {step === 1 && (
                 <>
                   <FormField
@@ -220,9 +293,7 @@ export default function RegisterPage() {
                     Next <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 ) : (
-                  <Button type="submit" className="ml-auto">
-                    Submit Registration
-                  </Button>
+                  <SubmitButton pending={pending} />
                 )}
               </div>
             </form>
@@ -232,4 +303,3 @@ export default function RegisterPage() {
     </div>
   )
 }
-
