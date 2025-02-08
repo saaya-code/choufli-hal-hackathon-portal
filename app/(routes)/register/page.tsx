@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster" // Added Toaster import
+
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { registerTeam } from "@/app/actions/teamActions"
@@ -74,6 +76,7 @@ export default function RegisterPage() {
 
   // Handle form state changes
   useEffect(() => {
+    console.log(state)
     if (state?.message && !state.error) {
       toast({
         title: "Success!",
@@ -142,6 +145,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background py-20">
+     <Toaster /> 
       <div className="container max-w-2xl">
         <div className="text-center mb-12 relative">
           <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 w-32 h-32 opacity-20">
