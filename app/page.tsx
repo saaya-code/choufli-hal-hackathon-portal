@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ImageGallery } from "@/components/image-gallery";
 import { SponsorsSection } from "@/components/sponsors-section";
 import { TimelineSection } from "@/components/timeline-section";
+import Footer from "@/components/Footer";
 
 export default function LandingPage() {
   return (
@@ -252,6 +253,7 @@ export default function LandingPage() {
       </section>
 
       <ScrollToTop />
+      <Footer />
     </div>
   );
 }
