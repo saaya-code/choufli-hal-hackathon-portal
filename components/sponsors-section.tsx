@@ -23,39 +23,12 @@ interface Sponsor {
 const sponsors: Sponsor[] = [
   {
     id: 1,
-    name: "GoMyCode",
+    name: "GDGC ISSATSo",
     description:
-      "Leading tech education platform in Africa and the Middle East, providing innovative learning experiences.",
-    logo: "/sponsors/gomycode.svg",
-    website: "https://gomycode.com",
+      "GDG Club ISSATSo is a student club that aims to help students develop their technical skills and connect with the tech community.",
+    logo: "/gdg-logo.svg",
+    website: "https://gdgc-issatso.tech",
     tier: "gold",
-  },
-  {
-    id: 2,
-    name: "Focus Corporation",
-    description:
-      "Technology solutions provider specializing in software development and digital transformation.",
-    logo: "/sponsors/focus.svg",
-    website: "https://focus.tech",
-    tier: "gold",
-  },
-  {
-    id: 3,
-    name: "Think-it",
-    description:
-      "Global technology company building high-performing engineering teams.",
-    logo: "/sponsors/think-it.svg",
-    website: "https://think-it.io",
-    tier: "silver",
-  },
-  {
-    id: 4,
-    name: "InstaDeep",
-    description:
-      "Leader in AI-powered decision-making systems for the Enterprise.",
-    logo: "/sponsors/instadeep.svg",
-    website: "https://instadeep.com",
-    tier: "silver",
   },
 ];
 
