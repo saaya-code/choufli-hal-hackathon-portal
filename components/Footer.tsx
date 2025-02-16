@@ -2,13 +2,13 @@
 import { useState } from "react";
 import { FaFacebook, FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import ContactDialog from "./ContactDialog";
+import ContactDialog from "./contact-dialog";
 
 export default function Footer() {
   const [contactDialogOpen, setContactDialogOpen] = useState(false);
 
   return (
-    <footer className="bg-white border-t">
+    <footer className="bg-white border-t" id="contact">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">

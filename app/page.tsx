@@ -7,11 +7,12 @@ import Link from "next/link";
 import { ImageGallery } from "@/components/image-gallery";
 import { SponsorsSection } from "@/components/sponsors-section";
 import { TimelineSection } from "@/components/timeline-section";
-import Footer from "@/components/Footer";
+import { VideoTrailer } from "@/components/video-trailer"
+import Footer from "@/components/footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background">
+    <div className="min-h-screen bg-blueBackground">
       <Navbar />
 
       {/* Hero Section with enhanced decorative elements */}
@@ -76,17 +77,39 @@ export default function LandingPage() {
                   Register Now
                 </Button>
               </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-primary hover:bg-primary/10 hover:text-primary"
-              >
-                Learn More
-              </Button>
+              <Link href="#contact">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-primary hover:bg-primary/10 hover:text-primary"
+                >
+                  Contact Us
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
+
+      <section id="trailer" className="py-20 bg-accent/5">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+              Experience Choufli Hal 2.0
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Watch our trailer and get excited for the upcoming hackathon!
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            <VideoTrailer
+              videoUrl="https://drive.google.com/file/d/10h77RFOgbRWf2LKmoYpKt2nyVQLcIAob/view"
+              thumbnailUrl="/group_pic.png"
+            />
+          </div>
+        </div>
+      </section>
+
 
       {/* About Section */}
       <section
