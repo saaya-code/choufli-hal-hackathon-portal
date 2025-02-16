@@ -77,6 +77,7 @@ export function Navbar() {
           <div className="hidden md:flex space-x-1">
             {[
               { id: "home", label: "Home" },
+              { id: "trailer", label: "Trailer" },
               { id: "about", label: "About" },
               { id: "gallery", label: "Gallery" },
               { id: "timeline", label: "Timeline" },

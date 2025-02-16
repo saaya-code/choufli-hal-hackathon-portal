@@ -144,7 +144,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background py-20">
+    <div className="min-h-screen bg-blueBackground">
      <Toaster /> 
       <div className="container max-w-2xl">
         <div className="text-center mb-12 relative">
