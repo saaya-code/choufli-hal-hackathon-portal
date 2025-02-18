@@ -8,7 +8,6 @@ import { z } from 'zod';
 export async function registerTeam(initialState: unknown, formData: FormData) {
   try {
     await connectToDatabase();
-    await Team.syncIndexes();
     console.log(formData)
     const teamName = formData.get('teamName') as string;
     const teamSize = Number(formData.get('teamSize'));
