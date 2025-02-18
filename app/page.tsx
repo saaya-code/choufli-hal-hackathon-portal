@@ -104,7 +104,7 @@ export default function LandingPage() {
           <div className="max-w-4xl mx-auto">
             <VideoTrailer
               videoUrl="https://drive.google.com/file/d/10h77RFOgbRWf2LKmoYpKt2nyVQLcIAob/view"
-              thumbnailUrl="/group_pic.png"
+              thumbnailUrl="/thumbnail.jpg"
             />
           </div>
         </div>
