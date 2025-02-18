@@ -9,7 +9,7 @@ export interface ITeamMember {
 export interface ITeam extends Document {
   teamName: string;
   teamSize: number;
-  experience: string;
+  experience?: string;
   teamMembers: ITeamMember[];
 }
 
@@ -22,7 +22,7 @@ const teamMemberSchema = new Schema<ITeamMember>({
 const teamSchema = new Schema<ITeam>({
   teamName: { type: String, required: true },
   teamSize: { type: Number, required: true, min: 1 },
-  experience: { type: String, required: true },
+  experience: { type: String, required: false, default: "No Experience Provided." },
   teamMembers: { type: [teamMemberSchema], default: [] }
 });
 
