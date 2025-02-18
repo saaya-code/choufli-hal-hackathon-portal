@@ -8,12 +8,14 @@ import { z } from 'zod';
 export async function registerTeam(initialState: unknown, formData: FormData) {
   try {
     await connectToDatabase();
+    await Team.syncIndexes();
+    console.log(formData)
     const teamName = formData.get('teamName') as string;
     const teamSize = Number(formData.get('teamSize'));
     const experience = formData.get('experience') as string;
     const teamMembers = JSON.parse(formData.get('teamMembers') as string) as ITeamMember[];
 
-    if (!teamName || !teamSize || !experience || !Array.isArray(teamMembers)) {
+    if (!teamName || !teamSize || !Array.isArray(teamMembers)) {
       throw new Error('Invalid form data');
     }
 

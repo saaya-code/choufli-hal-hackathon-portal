@@ -27,7 +27,7 @@ const teamMemberSchema = z.object({
 const formSchema = z.object({
   teamName: z.string().min(2, "Team name must be at least 2 characters."),
   teamSize: z.string(),
-  experience: z.string().min(10, "Please tell us a bit more about your experience."),
+  experience: z.optional(z.string()),
   teamMembers: z.array(teamMemberSchema),
 })
 
@@ -76,7 +76,6 @@ export default function RegisterPage() {
 
   // Handle form state changes
   useEffect(() => {
-    console.log(state)
     if (state?.message && !state.error) {
       toast({
         title: "Success!",
