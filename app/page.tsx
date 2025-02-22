@@ -5,7 +5,7 @@ import { MoonIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ImageGallery } from "@/components/image-gallery";
-import { SponsorsSection } from "@/components/sponsors-section";
+// import { SponsorsSection } from "@/components/sponsors-section";
 import { TimelineSection } from "@/components/timeline-section";
 import { VideoTrailer } from "@/components/video-trailer"
 import Footer from "@/components/footer";
@@ -77,7 +77,7 @@ export default function LandingPage() {
                   Register Now
                 </Button>
               </Link>
-              <Link href="#contact">
+              <Link href="/contact">
                 <Button
                   size="lg"
                   variant="outline"
@@ -165,7 +165,7 @@ export default function LandingPage() {
 
       <TimelineSection />
 
-      <SponsorsSection />
+      {/* <SponsorsSection /> */}
 
       {/* Enhanced Features Section */}
       <section id="features" className="py-32 bg-accent/5">
