@@ -9,7 +9,8 @@ export interface EmailOptions {
 
 export async function sendEmail({ to, subject, text, html }: EmailOptions): Promise<void> {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+      port: 465,
+      host: "smtp.gmail.com",
         auth: {
             user: process.env.GMAIL_USER, 
             pass: process.env.GMAIL_PASS, 
@@ -24,11 +25,30 @@ export async function sendEmail({ to, subject, text, html }: EmailOptions): Prom
         html, 
     };
 
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent:', info.response);
-    } catch (error) {
-        console.error('Error sending email:', error);
-        throw new Error('Failed to send email');
-    }
+   
+      await new Promise((resolve, reject) => {
+        // verify connection configuration
+        transporter.verify(function (error, success) {
+            if (error) {
+                console.log(error);
+                reject(error);
+            } else {
+                console.log("Server is ready to take our messages");
+                resolve(success);
+            }
+        });
+    });
+    await new Promise((resolve, reject) => {
+      // send mail
+      transporter.sendMail(mailOptions, (err, info) => {
+          if (err) {
+              console.error(err);
+              reject(err);
+          } else {
+              console.log(info);
+              resolve(info);
+          }
+      });
+  });
+    
 }
