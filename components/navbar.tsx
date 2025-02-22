@@ -49,7 +49,9 @@ export function Navbar() {
     <nav
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"
+        isScrolled
+          ? "bg-white/80 backdrop-blur-md shadow-sm"
+          : "bg-transparent",
       )}
     >
       <div className="container mx-auto">
@@ -81,7 +83,7 @@ export function Navbar() {
               { id: "about", label: "About" },
               { id: "gallery", label: "Gallery" },
               { id: "timeline", label: "Timeline" },
-              { id: "sponsors", label: "Sponsors" },
+              //{ id: "sponsors", label: "Sponsors" },
               { id: "features", label: "Features" },
             ].map((item) => (
               <Button
@@ -89,7 +91,7 @@ export function Navbar() {
                 variant="ghost"
                 className={cn(
                   "text-sm hover:bg-primary/10 hover:text-primary",
-                  activeSection === item.id && "bg-primary/10 text-primary"
+                  activeSection === item.id && "bg-primary/10 text-primary",
                 )}
                 onClick={() => scrollToSection(item.id)}
               >
