@@ -155,12 +155,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Timeline Section */}
       <TimelineSection />
 
-      {/* <SponsorsSection /> */}
-
       {/* Enhanced Features Section */}
-      <section id="features" className="py-32 bg-accent/5">
+      <section id="features" className="py-32">
         <div className="container">
           <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-12">
             What Makes Us Special
