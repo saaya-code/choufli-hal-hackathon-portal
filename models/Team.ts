@@ -26,4 +26,4 @@ const teamSchema = new Schema<ITeam>({
   teamMembers: { type: [teamMemberSchema], default: [] }
 });
 
-export default mongoose.model<ITeam>('Team', teamSchema);
+export const Team = mongoose.models.Team || mongoose.model<ITeam>('Team', teamSchema);
