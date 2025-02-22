@@ -1,29 +1,30 @@
-import { CalendarIcon, ClockIcon, StarIcon, MapPinIcon } from "lucide-react";
+import { CalendarIcon, ClockIcon, MapPinIcon, BookAIcon } from "lucide-react";
 
 const timelineEvents = [
   {
     icon: <CalendarIcon className="h-8 w-8 text-primary" />,
     title: "Registration Opens",
-    date: "March 1st, 2024",
-    description: "Begin your journey with us",
+    date: "February 22nd, 2024",
+    description: "Begin your learning journey with us",
+  },
+  {
+    icon: <BookAIcon className="h-8 w-8 text-primary" />,
+    title: "Online workshops",
+    date: "March 3-4th, 2024",
+    description: "What's new in tech? Learn from the best",
   },
   {
     icon: <ClockIcon className="h-8 w-8 text-primary" />,
-    title: "Kickoff Event",
-    date: "March 15th, 2024",
-    description: "Opening ceremony and team formation",
+    title: "Hackathon Kickoff",
+    date: "March 4th, 2024",
+    description: "Challenge announcement at 11:59 PM and lasts 24 hours",
   },
-  {
-    icon: <StarIcon className="h-8 w-8 text-primary" />,
-    title: "Hackathon Weekend",
-    date: "March 16-17th, 2024",
-    description: "48 hours of innovation",
-  },
+
   {
     icon: <MapPinIcon className="h-8 w-8 text-primary" />,
-    title: "Awards Ceremony",
-    date: "March 17th, 2024",
-    description: "Celebrate achievements",
+    title: "Pitching & Awards Ceremony",
+    date: "March 6th, 2024",
+    description: "Break your fast with us, pitch your project and win",
   },
 ];
 
