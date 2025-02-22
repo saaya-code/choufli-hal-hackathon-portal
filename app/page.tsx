@@ -7,8 +7,9 @@ import Link from "next/link";
 import { ImageGallery } from "@/components/image-gallery";
 // import { SponsorsSection } from "@/components/sponsors-section";
 import { TimelineSection } from "@/components/timeline-section";
-import { VideoTrailer } from "@/components/video-trailer"
+import { VideoTrailer } from "@/components/video-trailer";
 import Footer from "@/components/footer";
+import { ContactButton } from "@/components/contact-button";
 
 export default function LandingPage() {
   return (
@@ -77,15 +78,7 @@ export default function LandingPage() {
                   Register Now
                 </Button>
               </Link>
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-primary hover:bg-primary/10 hover:text-primary"
-                >
-                  Contact Us
-                </Button>
-              </Link>
+              <ContactButton />
             </div>
           </div>
         </div>
@@ -109,7 +102,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
 
       {/* About Section */}
       <section
