@@ -31,9 +31,9 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { registerTeam } from "@/app/actions/teamActions";
+import { registerTeam, registerTeamToWaitList } from "@/app/actions/teamActions";
 
-const MAX_TEAMS = 25;
+const MAX_TEAMS = 28;
 
 const fetchRegisteredTeams = async () => {
   // Replace this with your actual API call
@@ -65,7 +65,7 @@ function SubmitButton({
   ...props
 }: {
   pending: boolean;
-  disabled: boolean;
+  disabled?: boolean;
   [key: string]: unknown;
 }) {
   return (
@@ -116,6 +116,8 @@ export default function RegisterPage() {
     initialState
   );
 
+  const [waitListState, waitListFormAction, waitListPending] = useActionState(registerTeamToWaitList, initialState);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -149,6 +151,26 @@ export default function RegisterPage() {
     }
   }, [state, toast, router]);
 
+  // toast handler for waitList
+  useEffect(() => {
+    if (waitListState?.message && !waitListState.error) {
+      toast({
+        title: "Success!",
+        description: waitListState.message,
+      });
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
+    }
+
+    if (waitListState?.error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: waitListState.error,
+      });
+    }
+  }, [waitListState, toast, router]);
   // Watch teamSize changes to update form fields
   useEffect(() => {
     const currentTeamMembers = form.getValues("teamMembers");
@@ -196,9 +218,10 @@ export default function RegisterPage() {
         formData.append(key, value as string);
       }
     });
-
-    const result = formAction(formData);
-    return result;
+    if(isRegistrationClosed){
+      return waitListFormAction(formData);
+    }
+    return formAction(formData);
   }
 
   return (
@@ -244,27 +267,37 @@ export default function RegisterPage() {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-lg p-8">
-            {isRegistrationClosed ? (
-              <div className="text-center space-y-4">
-                <h2 className="text-2xl font-bold text-primary">
-                  Registration Closed
-                </h2>
-                <p className="text-muted-foreground">
-                  We&apos;re sorry, but all available spots have been filled.
-                  Please contact us for more information or to be added to the
-                  waiting list.
-                </p>
-                <Link href="/contact" className="inline-block">
-                  <Button>Contact Us</Button>
-                </Link>
-              </div>
-            ) : (
+            
               <>
                 <div className="text-center mb-6">
+                  {isRegistrationClosed ? (
+                  <>
+                    <p className="text-lg font-semibold text-red-500">
+                    Registration Closed!
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                    You can still register for the waitlist.
+                    </p>
+                    <p className="text-lg font-semibold">
+                      Number of Teams in the Waitlist Queue:{" "}
+                      <span
+                      className={`${
+                        (registeredTeams?.inWaitlist ?? 0) > 0
+                        ? "text-red-500 animate-pulse"
+                        : "text-primary"
+                      }`}
+                      title="Teams waiting for an open slot"
+                      >
+                      {registeredTeams?.inWaitlist ?? 0}
+                      </span>
+                    </p>
+                  </>
+                  ) : (
                   <p className="text-lg font-semibold">
                     Places left:{" "}
                     <span className="text-primary">{placesLeft}</span>
                   </p>
+                  )}
                 </div>
                 <div className="mb-8">
                   <div className="flex justify-between mb-2">
@@ -434,15 +467,14 @@ export default function RegisterPage() {
                       ) : (
                         <SubmitButton
                           className="ml-auto"
-                          pending={pending}
-                          disabled={isRegistrationClosed}
+                          pending={pending || waitListPending}
                         />
                       )}
                     </div>
                   </form>
                 </Form>
               </>
-            )}
+            
           </div>
         )}
       </div>
