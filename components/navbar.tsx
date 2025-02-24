@@ -5,16 +5,17 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Menu, X } from "lucide-react";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      // Adjusted scroll position calculation
       const sections = document.querySelectorAll("section[id]");
       const scrollPosition = window.scrollY + 200;
 
@@ -42,21 +43,32 @@ export function Navbar() {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+      setIsMobileMenuOpen(false);
     }
   };
+
+  const navItems = [
+    { id: "home", label: "Home" },
+    { id: "trailer", label: "Trailer" },
+    { id: "about", label: "About" },
+    { id: "gallery", label: "Gallery" },
+    { id: "timeline", label: "Timeline" },
+    { id: "features", label: "Features" },
+  ];
 
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled
-          ? "bg-white/80 backdrop-blur-md shadow-sm"
-          : "bg-transparent",
+        "fixed top-0 left-0 right-0 z-[60] transition-all duration-300",
+        isScrolled || activeSection === "home"
+          ? "bg-white shadow-sm"
+          : "bg-white/80 backdrop-blur-md"
       )}
     >
-      <div className="container mx-auto">
+      <div className="container mx-auto relative z-50">
+        {" "}
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center z-50">
             <div className="relative w-16 h-8">
               <Image
                 src="/gdg-logo.svg"
@@ -76,22 +88,16 @@ export function Navbar() {
               />
             </div>
           </div>
-          <div className="hidden md:flex space-x-1">
-            {[
-              { id: "home", label: "Home" },
-              { id: "trailer", label: "Trailer" },
-              { id: "about", label: "About" },
-              { id: "gallery", label: "Gallery" },
-              { id: "timeline", label: "Timeline" },
-              //{ id: "sponsors", label: "Sponsors" },
-              { id: "features", label: "Features" },
-            ].map((item) => (
+
+          <div className="hidden md:flex space-x-1 z-50">
+            {navItems.map((item) => (
               <Button
                 key={item.id}
                 variant="ghost"
                 className={cn(
-                  "text-sm hover:bg-primary/10 hover:text-primary",
+                  "text-sm hover:bg-primary/10 hover:text-primary relative",
                   activeSection === item.id && "bg-primary/10 text-primary",
+                  "active:bg-primary/10 active:text-primary"
                 )}
                 onClick={() => scrollToSection(item.id)}
               >
@@ -106,6 +112,68 @@ export function Navbar() {
                 Register Now
               </Button>
             </Link>
+          </div>
+
+          <button
+            className="md:hidden p-2 z-50"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6 text-primary" />
+            ) : (
+              <Menu className="h-6 w-6 text-primary" />
+            )}
+          </button>
+        </div>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 bg-black/20 z-40" aria-hidden="true" />
+        )}
+        <div
+          className={cn(
+            "fixed inset-0 z-50 md:hidden",
+            "bg-white transition-all duration-300",
+            isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          )}
+        >
+          <div className="flex flex-col h-full">
+            <div className="flex justify-end p-4">
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2"
+              >
+                <X className="h-6 w-6 text-primary" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4 pb-6">
+              <div className="flex flex-col space-y-4">
+                {navItems.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant="ghost"
+                    className={cn(
+                      "w-full text-left text-lg py-4",
+                      activeSection === item.id && "bg-primary/10 text-primary",
+                      "active:bg-primary/10 active:text-primary"
+                    )}
+                    onClick={() => {
+                      scrollToSection(item.id);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+                <Link href="/register" className="w-full">
+                  <Button
+                    variant="default"
+                    className="w-full bg-primary text-white hover:bg-primary/90"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Register Now
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
