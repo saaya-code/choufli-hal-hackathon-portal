@@ -68,26 +68,28 @@ export function Navbar() {
       <div className="container mx-auto relative z-50">
         {" "}
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center z-50">
-            <div className="relative w-16 h-8">
-              <Image
-                src="/gdg-logo.svg"
-                alt="GDGC ISSATSO"
-                fill
-                className="object-contain"
-                priority
-              />
+          <Link href="/">
+            <div className="flex items-center z-50">
+              <div className="relative w-16 h-8">
+                <Image
+                  src="/gdg-logo.svg"
+                  alt="GDGC ISSATSO"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <div className="relative w-32 h-8">
+                <Image
+                  src="/logo.png"
+                  alt="Choufli Hal 2.0"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </div>
-            <div className="relative w-32 h-8">
-              <Image
-                src="/logo.png"
-                alt="Choufli Hal 2.0"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
+          </Link>
 
           <div className="hidden md:flex space-x-1 z-50">
             {navItems.map((item) => (
