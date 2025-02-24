@@ -34,7 +34,7 @@ export async function registerTeam(initialState: unknown, formData: FormData) {
     });
 
     await newTeam.save();
-    sendEmail({
+    await sendEmail({
       to: teamMembers.map(member => member.email).join(', '),
       subject: 'Choufli Hal 2.0 - Participation Confirmed!',
       html: participationEmailTemplate(teamName, teamMembers.map(t=>t.name), process.env.BASE_URL+"/contact")
