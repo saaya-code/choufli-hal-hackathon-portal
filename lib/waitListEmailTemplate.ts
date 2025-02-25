@@ -15,7 +15,7 @@ export const waitlistEmailTemplate = (
         Thank you for registering for the <strong>Choufli Hal 2.0 Hackathon</strong>! Unfortunately, all available spots have been filled. However, we are pleased to inform you that your team, <strong>${teamName}</strong>, has been added to our waitlist.
       </p>
       <div style="margin-bottom: 10px;">
-        <strong>Current Waitlist Position:</strong> ${positionInWaitlist}
+        <strong>Current Waitlist Position:</strong> ${positionInWaitlist+1}
       </div>
       <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
         If a spot becomes available, we will notify you as soon as possible. In the meantime, feel free to reach out if you have any questions.
