@@ -4,26 +4,26 @@ const timelineEvents = [
   {
     icon: <CalendarIcon className="h-8 w-8 text-primary" />,
     title: "Registration Opens",
-    date: "February 22nd, 2024",
+    date: "February 22nd, 2025",
     description: "Begin your learning journey with us",
   },
   {
     icon: <BookAIcon className="h-8 w-8 text-primary" />,
     title: "Online workshops",
-    date: "March 3-4th, 2024",
+    date: "March 3-4th, 2025",
     description: "What's new in tech? Learn from the best",
   },
   {
     icon: <ClockIcon className="h-8 w-8 text-primary" />,
     title: "Hackathon Kickoff",
-    date: "March 4th, 2024",
+    date: "March 4th, 2025",
     description: "Challenge announcement at 11:59 PM and lasts 24 hours",
   },
 
   {
     icon: <MapPinIcon className="h-8 w-8 text-primary" />,
     title: "Pitching & Awards Ceremony",
-    date: "March 6th, 2024",
+    date: "March 6th, 2025",
     description: "Break your fast with us, pitch your project and win",
   },
 ];
