@@ -7,6 +7,7 @@ import { sendEmail } from '@/lib/mail';
 import { participationEmailTemplate } from '@/lib/emailTemplates';
 import { waitlistEmailTemplate } from '@/lib/waitListEmailTemplate';
 import { Waitlist } from '@/models/WaitlistTeam';
+import mongoose from 'mongoose';
 const MAX_TEAMS = 28;
 export async function registerTeam(initialState: unknown, formData: FormData) {
   try {
@@ -53,12 +54,23 @@ export async function registerTeam(initialState: unknown, formData: FormData) {
       error: "",
     }
   } catch (error) {
-    console.error('Registration error:', error)
-    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if((error as any)?.code === 11000){
+      return {
+        message: "",
+        error: "Email already used. If you want to change your team members, please contact us.",
+      }
+    }    
     if (error instanceof z.ZodError) {
       return {
         message: "",
         error: "Invalid form data. Please check your inputs.",
+      }
+    }
+    if(error instanceof mongoose.Error){
+      return {
+        message: "",
+        error: "Email already used. Please check your inputs.",
       }
     }
 
@@ -99,7 +111,13 @@ export async function registerTeamToWaitList(initialState: unknown, formData: Fo
     }
   } catch (error) {
     console.error('Registration error:', error)
-    
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if((error as any)?.code === 11000){
+      return {
+        message: "",
+        error: "Email already used. If you want to change your team members, please contact us.",
+      }
+    }  
     if (error instanceof z.ZodError) {
       return {
         message: "",
