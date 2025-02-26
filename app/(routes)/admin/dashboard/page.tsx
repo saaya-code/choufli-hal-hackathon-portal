@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AdminDashboard() {
   const { data: session } = useSession();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +31,7 @@ export default function AdminDashboard() {
 
         const data = await response.json();
         setDashboardData(data);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -45,8 +47,8 @@ export default function AdminDashboard() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-primary mb-2">Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back, {session?.user?.name || "Admin"}! Here&apos;s an overview of
-          the hackathon registration status.
+          Welcome back, {session?.user?.name || "Admin"}! Here&apos;s an
+          overview of the hackathon registration status.
         </p>
       </div>
 
