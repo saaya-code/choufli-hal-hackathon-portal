@@ -33,7 +33,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { registerTeam, registerTeamToWaitList } from "@/app/actions/teamActions";
 
-const MAX_TEAMS = 28;
+const MAX_TEAMS = 40;
 
 const fetchRegisteredTeams = async () => {
   // Replace this with your actual API call

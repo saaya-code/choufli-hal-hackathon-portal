@@ -8,7 +8,7 @@ import { participationEmailTemplate } from '@/lib/emailTemplates';
 import { waitlistEmailTemplate } from '@/lib/waitListEmailTemplate';
 import { Waitlist } from '@/models/WaitlistTeam';
 import mongoose from 'mongoose';
-const MAX_TEAMS = 28;
+const MAX_TEAMS = 40;
 export async function registerTeam(initialState: unknown, formData: FormData) {
   try {
     await connectToDatabase();
