@@ -31,6 +31,7 @@ export default function TeamsPage() {
           totalTeams: data.totalTeams,
           totalMembers: data.totalMembers,
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -52,6 +53,7 @@ export default function TeamsPage() {
       (team) =>
         team.teamName.toLowerCase().includes(term) ||
         team.teamMembers.some(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (member: any) =>
             member.name.toLowerCase().includes(term) ||
             member.email.toLowerCase().includes(term)

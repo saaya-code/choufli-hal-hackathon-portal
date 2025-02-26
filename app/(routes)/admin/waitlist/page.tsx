@@ -34,6 +34,7 @@ export default function WaitlistPage() {
           totalWaitlistedTeams: data.totalWaitlistedTeams,
           totalWaitlistMembers: data.totalWaitlistMembers,
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setError(err.message);
       } finally {
