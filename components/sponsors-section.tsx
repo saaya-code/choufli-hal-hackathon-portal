@@ -52,6 +52,14 @@ const sponsors: Sponsor[] = [
     logo: "/sponsors/logo-music-band.png",
     website: "https://www.instagram.com/binary_beats_club_isimm",
   },
+  {
+    id: 5,
+    name: "Saf Arts Events",
+    description:
+      "⚫️𝒜𝑔𝑒𝓃𝒸𝑒 𝒹𝑒 𝒹𝑒́𝒸𝑜𝓇𝒶𝓉𝒾𝑜𝓃 𝒸𝑜𝓃𝓉𝒶𝒸𝓉𝑒𝓏-𝓃𝑜𝓊𝓈 𝓈𝓊𝓇 𝓃𝓊𝓂𝑒́𝓇𝑜📞 𝟧𝟤𝟫𝟨𝟩𝟦𝟢𝟢 ▪️𝓃𝒶𝒾𝓈𝓈𝒶𝓃𝒸𝑒 👼🏻 ▪️ 𝒟𝑒𝓂𝒶𝓃𝒹𝑒 𝒹𝑒 𝓂𝒶𝓇𝒾𝒶𝑔𝑒👩‍❤️‍💋‍👨 ▪️𝒻𝒾𝒶𝓃𝒸̧𝒶𝒾𝓁𝓁𝑒𝓈💍 ▪️𝓂𝒶𝓇𝒾𝒶𝑔𝑒👰‍♀️ ▪️𝓉𝒽𝑜𝓊𝓇🧒🏻.",
+    logo: "/sponsors/saf-art-events.png",
+    website: "https://www.instagram.com/safart_events",
+  },
 ];
 
 export function SponsorsSection() {
