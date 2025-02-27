@@ -45,6 +45,7 @@ export default function AdminLoginPage() {
 
       router.push("/admin/dashboard");
       router.refresh();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast({
         variant: "destructive",
