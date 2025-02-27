@@ -19,6 +19,7 @@ const teamMemberSchema = new Schema<ITeamMember>({
   phone: { type: String, required: true }
 });
 
+
 const teamSchema = new Schema<ITeam>({
   teamName: { type: String, required: true },
   teamSize: { type: Number, required: true, min: 1 },

@@ -9,18 +9,20 @@ export interface IWaitlist extends Document {
   registeredAt: Date;
 }
 
+const waitlistTeamMemberSchema = new Schema<ITeamMember>({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  phone: { type: String, required: true }
+});
+
+
+
 const waitlistSchema = new Schema<IWaitlist>({
   teamName: { type: String, required: true },
   teamSize: { type: Number, required: true, min: 1 },
   experience: { type: String, required: false, default: "No Experience Provided." },
   teamMembers: {
-    type: [
-      new Schema<ITeamMember>({
-        name: { type: String, required: true },
-        email: { type: String, required: true },
-        phone: { type: String, required: true }
-      })
-    ],
+    type: [waitlistTeamMemberSchema],
     default: []
   },
   registeredAt: { type: Date, default: Date.now }

@@ -31,12 +31,14 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { registerTeam, registerTeamToWaitList } from "@/app/actions/teamActions";
+import {
+  registerTeam,
+  registerTeamToWaitList,
+} from "@/app/actions/teamActions";
 
 const MAX_TEAMS = 40;
 
 const fetchRegisteredTeams = async () => {
-  // Replace this with your actual API call
   const response = await fetch("/api/registered-teams");
   if (!response.ok) {
     throw new Error("Failed to fetch registered teams");
@@ -55,7 +57,16 @@ const formSchema = z.object({
   teamName: z.string().min(2, "Team name must be at least 2 characters."),
   teamSize: z.string(),
   experience: z.optional(z.string()),
-  teamMembers: z.array(teamMemberSchema),
+  teamMembers: z.array(teamMemberSchema).refine(
+    (members) => {
+      const emails = members.map((m) => m.email);
+      return new Set(emails).size === emails.length;
+    },
+    {
+      message: "Each team member must have a unique email address",
+      path: ["teamMembers"],
+    }
+  ),
 });
 
 // Submit Button Component with loading state
@@ -116,7 +127,10 @@ export default function RegisterPage() {
     initialState
   );
 
-  const [waitListState, waitListFormAction, waitListPending] = useActionState(registerTeamToWaitList, initialState);
+  const [waitListState, waitListFormAction, waitListPending] = useActionState(
+    registerTeamToWaitList,
+    initialState
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -218,7 +232,7 @@ export default function RegisterPage() {
         formData.append(key, value as string);
       }
     });
-    if(isRegistrationClosed){
+    if (isRegistrationClosed) {
       return waitListFormAction(formData);
     }
     return formAction(formData);
@@ -267,214 +281,212 @@ export default function RegisterPage() {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-lg p-8">
-            
-              <>
-                <div className="text-center mb-6">
-                  {isRegistrationClosed ? (
+            <>
+              <div className="text-center mb-6">
+                {isRegistrationClosed ? (
                   <>
                     <p className="text-lg font-semibold text-red-500">
-                    Registration Closed!
+                      Registration Closed!
                     </p>
                     <p className="text-sm text-muted-foreground">
-                    You can still register for the waitlist.
+                      You can still register for the waitlist.
                     </p>
                     <p className="text-lg font-semibold">
                       Number of Teams in the Waitlist Queue:{" "}
                       <span
-                      className={`${
-                        (registeredTeams?.inWaitlist ?? 0) > 0
-                        ? "text-red-500 animate-pulse"
-                        : "text-primary"
-                      }`}
-                      title="Teams waiting for an open slot"
+                        className={`${
+                          (registeredTeams?.inWaitlist ?? 0) > 0
+                            ? "text-red-500 animate-pulse"
+                            : "text-primary"
+                        }`}
+                        title="Teams waiting for an open slot"
                       >
-                      {registeredTeams?.inWaitlist ?? 0}
+                        {registeredTeams?.inWaitlist ?? 0}
                       </span>
                     </p>
                   </>
-                  ) : (
+                ) : (
                   <p className="text-lg font-semibold">
                     Places left:{" "}
                     <span className="text-primary">{placesLeft}</span>
                   </p>
-                  )}
+                )}
+              </div>
+              <div className="mb-8">
+                <div className="flex justify-between mb-2">
+                  {Array.from({ length: totalSteps }, (_, i) => (
+                    <div
+                      key={i}
+                      className={`w-1/3 h-2 rounded-full ${
+                        i + 1 <= step ? "bg-primary" : "bg-gray-200"
+                      }`}
+                    />
+                  ))}
                 </div>
-                <div className="mb-8">
-                  <div className="flex justify-between mb-2">
-                    {Array.from({ length: totalSteps }, (_, i) => (
-                      <div
-                        key={i}
-                        className={`w-1/3 h-2 rounded-full ${
-                          i + 1 <= step ? "bg-primary" : "bg-gray-200"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-center text-sm text-muted-foreground">
-                    Step {step} of {totalSteps}
-                  </p>
-                </div>
+                <p className="text-center text-sm text-muted-foreground">
+                  Step {step} of {totalSteps}
+                </p>
+              </div>
 
-                <Form {...form}>
-                  <form action={submitForm} className="space-y-8">
-                    {step === 1 && (
-                      <>
-                        <FormField
-                          control={form.control}
-                          name="teamName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Team Name</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="Enter your team name"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="teamSize"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Team Size</FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select team size" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="1">
-                                    Solo (1 person)
-                                  </SelectItem>
-                                  <SelectItem value="2">2 people</SelectItem>
-                                  <SelectItem value="3">3 people</SelectItem>
-                                  <SelectItem value="4">4 people</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </>
-                    )}
-
-                    {step === 2 && (
-                      <div className="space-y-8">
-                        {Array.from({ length: teamSize }).map((_, index) => (
-                          <div key={index} className="space-y-4">
-                            <h3 className="text-lg font-semibold">
-                              Team Member {index + 1}
-                            </h3>
-                            <FormField
-                              control={form.control}
-                              name={`teamMembers.${index}.name`}
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Full Name</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="John Doe" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name={`teamMembers.${index}.email`}
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Email</FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      placeholder="john@example.com"
-                                      type="email"
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name={`teamMembers.${index}.phone`}
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Phone Number</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="+216" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {step === 3 && (
+              <Form {...form}>
+                <form action={submitForm} className="space-y-8">
+                  {step === 1 && (
+                    <>
                       <FormField
                         control={form.control}
-                        name="experience"
+                        name="teamName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Previous Experience</FormLabel>
+                            <FormLabel>Team Name</FormLabel>
                             <FormControl>
-                              <Textarea
-                                placeholder="Tell us about your team's coding experience and why you want to join the hackathon"
-                                className="resize-none"
+                              <Input
+                                placeholder="Enter your team name"
                                 {...field}
                               />
                             </FormControl>
-                            <FormDescription>
-                              Brief description of your team&apos;s technical
-                              background and interests
-                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                    )}
 
-                    <div className="flex justify-between">
-                      {step > 1 && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={prevStep}
-                        >
-                          <ChevronLeft className="mr-2 h-4 w-4" /> Previous
-                        </Button>
-                      )}
-                      {step < totalSteps ? (
-                        <Button
-                          type="button"
-                          onClick={nextStep}
-                          className="ml-auto"
-                        >
-                          Next <ChevronRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      ) : (
-                        <SubmitButton
-                          className="ml-auto"
-                          pending={pending || waitListPending}
-                        />
-                      )}
+                      <FormField
+                        control={form.control}
+                        name="teamSize"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Team Size</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select team size" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="1">
+                                  Solo (1 person)
+                                </SelectItem>
+                                <SelectItem value="2">2 people</SelectItem>
+                                <SelectItem value="3">3 people</SelectItem>
+                                <SelectItem value="4">4 people</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
+
+                  {step === 2 && (
+                    <div className="space-y-8">
+                      {Array.from({ length: teamSize }).map((_, index) => (
+                        <div key={index} className="space-y-4">
+                          <h3 className="text-lg font-semibold">
+                            Team Member {index + 1}
+                          </h3>
+                          <FormField
+                            control={form.control}
+                            name={`teamMembers.${index}.name`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Full Name</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="John Doe" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`teamMembers.${index}.email`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="john@example.com"
+                                    type="email"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`teamMembers.${index}.phone`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Phone Number</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="+216" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      ))}
                     </div>
-                  </form>
-                </Form>
-              </>
-            
+                  )}
+
+                  {step === 3 && (
+                    <FormField
+                      control={form.control}
+                      name="experience"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Previous Experience</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Tell us about your team's coding experience and why you want to join the hackathon"
+                              className="resize-none"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Brief description of your team&apos;s technical
+                            background and interests
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  <div className="flex justify-between">
+                    {step > 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={prevStep}
+                      >
+                        <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+                      </Button>
+                    )}
+                    {step < totalSteps ? (
+                      <Button
+                        type="button"
+                        onClick={nextStep}
+                        className="ml-auto"
+                      >
+                        Next <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    ) : (
+                      <SubmitButton
+                        className="ml-auto"
+                        pending={pending || waitListPending}
+                      />
+                    )}
+                  </div>
+                </form>
+              </Form>
+            </>
           </div>
         )}
       </div>

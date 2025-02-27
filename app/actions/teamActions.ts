@@ -9,6 +9,29 @@ import { waitlistEmailTemplate } from '@/lib/waitListEmailTemplate';
 import { Waitlist } from '@/models/WaitlistTeam';
 import mongoose from 'mongoose';
 const MAX_TEAMS = 40;
+
+async function checkForDuplicateEmails(teamMembers: ITeamMember[]) {
+  const emails = teamMembers.map(member => member.email);
+  
+  if (new Set(emails).size !== emails.length) {
+    throw new Error("Each team member must have a unique email.");
+  }
+
+  for (const email of emails) {
+    const existingTeamMember = await Team.findOne({ 'teamMembers.email': email });
+    if (existingTeamMember) {
+      throw new Error(`Email ${email} is already registered with another team.`);
+    }
+  }
+
+  for (const email of emails) {
+    const existingWaitlistMember = await Waitlist.findOne({ 'teamMembers.email': email });
+    if (existingWaitlistMember) {
+      throw new Error(`Email ${email} is already registered with another team on the waitlist.`);
+    }
+  }
+}
+
 export async function registerTeam(initialState: unknown, formData: FormData) {
   try {
     await connectToDatabase();
@@ -34,6 +57,8 @@ export async function registerTeam(initialState: unknown, formData: FormData) {
       throw new Error('Invalid form data');
     }
 
+    await checkForDuplicateEmails(teamMembers);
+
     const newTeam = new Team({
       teamName,
       teamSize,
@@ -54,6 +79,7 @@ export async function registerTeam(initialState: unknown, formData: FormData) {
       error: "",
     }
   } catch (error) {
+    console.error('Registration error:', error);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if((error as any)?.code === 11000){
       return {
@@ -71,6 +97,12 @@ export async function registerTeam(initialState: unknown, formData: FormData) {
       return {
         message: "",
         error: "Email already used. Please check your inputs.",
+      }
+    }
+    if(error instanceof Error) {
+      return {
+        message: "",
+        error: error.message,
       }
     }
 
@@ -91,6 +123,9 @@ export async function registerTeamToWaitList(initialState: unknown, formData: Fo
     if (!teamName || !teamSize || !Array.isArray(teamMembers)) {
       throw new Error('Invalid form data');
     }
+
+    await checkForDuplicateEmails(teamMembers);
+    
     const numberOfWaitlistedTeams = await Waitlist.countDocuments({});
     const waitListTeam = new Waitlist({
       teamName,
@@ -102,7 +137,7 @@ export async function registerTeamToWaitList(initialState: unknown, formData: Fo
     await sendEmail({
       to: teamMembers.map(member => member.email).join(', '),
       subject: 'Choufli Hal 2.0 - Successfully added to the waitlist!',
-      html: waitlistEmailTemplate(teamName,numberOfWaitlistedTeams , process.env.BASE_URL+"/contact")
+      html: waitlistEmailTemplate(teamName, numberOfWaitlistedTeams, process.env.BASE_URL+"/contact")
     });
 
     return {
@@ -110,8 +145,8 @@ export async function registerTeamToWaitList(initialState: unknown, formData: Fo
       error: "",
     }
   } catch (error) {
-    console.error('Registration error:', error)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    console.error('Registration error:', error);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if((error as any)?.code === 11000){
       return {
         message: "",
@@ -122,6 +157,12 @@ export async function registerTeamToWaitList(initialState: unknown, formData: Fo
       return {
         message: "",
         error: "Invalid form data. Please check your inputs.",
+      }
+    }
+    if(error instanceof Error) {
+      return {
+        message: "",
+        error: error.message,
       }
     }
 
