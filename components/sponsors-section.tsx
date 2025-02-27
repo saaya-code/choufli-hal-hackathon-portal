@@ -68,7 +68,7 @@ export function SponsorsSection() {
             <div
               key={sponsor.id}
               onClick={() => setSelectedSponsor(sponsor)}
-              className="w-40 h-40 bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
+              className="w-40 h-40 bg-primary/40 rounded-lg shadow-md flex flex-col items-center justify-center p-4 hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
             >
               <div className="relative w-full h-24 mb-2">
                 <Image
@@ -79,7 +79,7 @@ export function SponsorsSection() {
                 />
               </div>
               <span
-                className="text-sm font-medium text-gray-500"
+                className="text-sm font-medium text-white"
               >
                 {sponsor.name}
               </span>
@@ -96,7 +96,7 @@ export function SponsorsSection() {
               <DialogTitle className="flex items-center gap-4">
                 {selectedSponsor && (
                   <>
-                    <div className="relative w-12 h-12">
+                    <div className="relative w-12 h-12 bg-primary/40 rounded-full shadow-md">
                       <Image
                         src={selectedSponsor.logo}
                         alt={selectedSponsor.name}
