@@ -20,7 +20,6 @@ const teamMemberSchema = new Schema<ITeamMember>({
 });
 
 
-
 const teamSchema = new Schema<ITeam>({
   teamName: { type: String, required: true },
   teamSize: { type: Number, required: true, min: 1 },
