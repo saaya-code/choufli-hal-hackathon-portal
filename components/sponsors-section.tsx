@@ -17,18 +17,40 @@ interface Sponsor {
   description: string;
   logo: string;
   website: string;
-  tier: "gold" | "silver" | "bronze";
 }
 
 const sponsors: Sponsor[] = [
   {
     id: 1,
-    name: "GDGC ISSATSo",
+    name: "Borgi Phones",
     description:
-      "GDG Club ISSATSo is a student club that aims to help students develop their technical skills and connect with the tech community.",
-    logo: "/gdg-logo.svg",
-    website: "https://gdgc-issatso.tech",
-    tier: "gold",
+      "Selling smartphones at the best prices on the market since 2012. We guarantee the best quality.",
+    logo: "/sponsors/logo-borgi-phones.png",
+    website: "https://borgiphones.com/",
+  },
+  {
+    id: 2,
+    name: "Raef Copy Center",
+    description:
+      "Raef Copy Center is a printing company that specializes in business cards, flyers, and banners.",
+    logo: "/sponsors/logo-impremerie.png",
+    website: "https://www.instagram.com/raeftraveauximpression",
+  },
+  {
+    id: 3,
+    name: "Escape Room",
+    description:
+      "The first and only Escape room in Sousse with the theme 'Squid Game' 🔍 Play with your friends, find the keys, solve the puzzles, and try to get out in 60 minutes! 🔒.",
+    logo: "/sponsors/logo-escape-room.png",
+    website: "https://escape-room-sousse.com/",
+  },
+  {
+    id: 4,
+    name: "Binary Beats Club",
+    description:
+      "Binary Beats Club ISIMM is a music band that plays amazing music and organizes events.",
+    logo: "/sponsors/logo-music-band.png",
+    website: "https://www.instagram.com/binary_beats_club_isimm",
   },
 ];
 
@@ -36,7 +58,7 @@ export function SponsorsSection() {
   const [selectedSponsor, setSelectedSponsor] = useState<Sponsor | null>(null);
 
   return (
-    <section id="sponsors" className="py-32">
+    <section id="sponsors" className="py-32 bg-accent/5">
       <div className="container">
         <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-12">
           Our Sponsors
@@ -57,16 +79,9 @@ export function SponsorsSection() {
                 />
               </div>
               <span
-                className={`text-sm font-medium ${
-                  sponsor.tier === "gold"
-                    ? "text-yellow-600"
-                    : sponsor.tier === "silver"
-                    ? "text-gray-500"
-                    : "text-orange-700"
-                }`}
+                className="text-sm font-medium text-gray-500"
               >
-                {sponsor.tier.charAt(0).toUpperCase() + sponsor.tier.slice(1)}{" "}
-                Sponsor
+                {sponsor.name}
               </span>
             </div>
           ))}
