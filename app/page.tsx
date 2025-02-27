@@ -10,6 +10,7 @@ import { TimelineSection } from "@/components/timeline-section";
 import { VideoTrailer } from "@/components/video-trailer";
 import Footer from "@/components/footer";
 import { ContactButton } from "@/components/contact-button";
+import { SponsorsSection } from "@/components/sponsors-section";
 
 export default function LandingPage() {
   return (
@@ -240,6 +241,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+      
+      {/* Sponsors Section */}
+      <SponsorsSection />
 
       {/* CTA Section */}
       <section className="py-32 bg-primary/5">

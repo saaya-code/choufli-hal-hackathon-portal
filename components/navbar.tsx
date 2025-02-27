@@ -54,6 +54,7 @@ export function Navbar() {
     { id: "gallery", label: "Gallery" },
     { id: "timeline", label: "Timeline" },
     { id: "features", label: "Features" },
+    { id: "sponsors", label: "Sponsors" },
   ];
 
   return (
