@@ -19,8 +19,7 @@ const teamMemberSchema = new Schema<ITeamMember>({
   phone: { type: String, required: true }
 });
 
-// Create a compound index to ensure emails are unique across all teams
-teamMemberSchema.index({ email: 1 }, { unique: true });
+
 
 const teamSchema = new Schema<ITeam>({
   teamName: { type: String, required: true },

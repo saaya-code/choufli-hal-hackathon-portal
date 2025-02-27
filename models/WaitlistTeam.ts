@@ -11,12 +11,11 @@ export interface IWaitlist extends Document {
 
 const waitlistTeamMemberSchema = new Schema<ITeamMember>({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   phone: { type: String, required: true }
 });
 
-// Create a compound index to ensure emails are unique across waitlisted teams
-waitlistTeamMemberSchema.index({ email: 1 }, { unique: true });
+
 
 const waitlistSchema = new Schema<IWaitlist>({
   teamName: { type: String, required: true },
