@@ -2,6 +2,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import type { NextAuthConfig } from 'next-auth';
 
 export const config = {
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: 'credentials',
