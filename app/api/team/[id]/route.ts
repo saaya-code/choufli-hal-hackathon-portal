@@ -6,11 +6,11 @@ import mongoose from 'mongoose';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-    const teamId = params.id;
+    const teamId = (await params).id;
     
     if (!teamId) {
       return NextResponse.json(

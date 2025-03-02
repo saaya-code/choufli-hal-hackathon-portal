@@ -7,11 +7,11 @@ export async function GET() {
   try {    
     await connectToDatabase();
     
-    const submissions = await Submission.find().sort({ submittedAt: -1 }).lean();
+    const submissions = await Submission.find().sort({ submittedAt: -1 });
     const submissionsCount = await Submission.countDocuments();
     
     const enrichedSubmissions = await Promise.all(submissions.map(async (submission) => {
-      const team = await Team.findById(submission.teamId).lean();
+      const team = await Team.findById(submission.teamId);
       return {
         ...submission,
         teamName: team?.teamName || 'Unknown Team',
