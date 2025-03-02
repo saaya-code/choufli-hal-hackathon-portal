@@ -27,6 +27,7 @@ import {
   AlertCircle,
   Search,
   FileCheck,
+  AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -40,6 +41,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const formSchema = z
   .object({
@@ -86,11 +88,41 @@ const fetchSubmissionCount = async () => {
   return response.json();
 };
 
+const validateTeamId = async (teamId: string) => {
+  try {
+    const response = await fetch(`/api/team/${teamId}`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        isValid: false,
+        error: data.error || "Invalid team ID",
+        team: null,
+      };
+    }
+
+    return {
+      isValid: true,
+      error: null,
+      team: data.team,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    return {
+      isValid: false,
+      error: "Failed to validate team ID",
+      team: null,
+    };
+  }
+};
+
 export default function SubmitPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
+
   const teamId = searchParams?.get("teamId");
+
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSubmissionActive, setIsSubmissionActive] = useState<boolean>(true);
@@ -99,18 +131,21 @@ export default function SubmitPage() {
     message: string;
   }>({ status: "loading", message: "Checking submission period..." });
   const [isTeamIdDialogOpen, setIsTeamIdDialogOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoadingTeam, setIsLoadingTeam] = useState(false);
   const [teamIdError, setTeamIdError] = useState<string | null>(null);
+
+  const [isTeamIdValid, setIsTeamIdValid] = useState<boolean | null>(null);
+  const [isValidatingTeam, setIsValidatingTeam] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [teamInfo, setTeamInfo] = useState<any>(null);
 
   const [state, formAction, pending] = useActionState(
     submitProject,
     initialState
   );
 
-  // Add submission count query
-  const {
-    data: submissionCountData,
-  } = useQuery({
+  const { data: submissionCountData } = useQuery({
     queryKey: ["submissionsCount"],
     queryFn: fetchSubmissionCount,
     refetchInterval: 60000,
@@ -139,12 +174,46 @@ export default function SubmitPage() {
   const watchedValues = form.watch();
 
   useEffect(() => {
-    if (!teamId) {
-      setIsTeamIdDialogOpen(true);
-    } else {
-      form.setValue("teamId", teamId);
-    }
-  }, [teamId, form]);
+    const validateTeamIdOnLoad = async () => {
+      if (!teamId) {
+        setIsTeamIdValid(false);
+        setIsTeamIdDialogOpen(true);
+        return;
+      }
+
+      setIsValidatingTeam(true);
+
+      try {
+        const { isValid, error, team } = await validateTeamId(teamId);
+
+        setIsTeamIdValid(isValid);
+
+        if (!isValid) {
+          setTeamIdError(error);
+          setIsTeamIdDialogOpen(true);
+
+          toast({
+            variant: "destructive",
+            title: "Invalid Team ID",
+            description: error || "The provided team ID is invalid",
+          });
+        } else {
+          setTeamInfo(team);
+          form.setValue("teamId", teamId);
+          setIsTeamIdDialogOpen(false);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        setIsTeamIdValid(false);
+        setTeamIdError("Failed to validate team ID");
+        setIsTeamIdDialogOpen(true);
+      } finally {
+        setIsValidatingTeam(false);
+      }
+    };
+
+    validateTeamIdOnLoad();
+  }, [teamId, toast, form]);
 
   useEffect(() => {
     if (file) {
@@ -204,29 +273,6 @@ export default function SubmitPage() {
       });
     }
   }, [state, toast]);
-
-  const validateTeamId = async (teamId: string) => {
-    setIsLoadingTeam(true);
-    setTeamIdError(null);
-
-    try {
-      const response = await fetch(`/api/team/${teamId}`);
-
-      if (!response.ok) {
-        const data = await response.json();
-        setTeamIdError(data.error || "Team not found");
-        return false;
-      }
-
-      return true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      setTeamIdError("Failed to validate team ID");
-      return false;
-    } finally {
-      setIsLoadingTeam(false);
-    }
-  };
 
   const handleTeamIdSubmit = async (data: z.infer<typeof teamIdSchema>) => {
     const isValid = await validateTeamId(data.teamId);
@@ -325,7 +371,21 @@ export default function SubmitPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-8">
-          {!isSubmissionActive ? (
+          {isValidatingTeam ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+              <p className="text-lg font-medium">Validating team...</p>
+            </div>
+          ) : !isTeamIdValid && teamId ? (
+            <Alert variant="destructive" className="mb-6">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Invalid Team ID</AlertTitle>
+              <AlertDescription>
+                {teamIdError ||
+                  "The provided team ID is invalid. Please check your URL or contact support."}
+              </AlertDescription>
+            </Alert>
+          ) : !isSubmissionActive ? (
             <div className="text-center p-8">
               <AlertCircle className="h-16 w-16 mx-auto text-amber-500 mb-4" />
               <h2 className="text-2xl font-bold text-primary mb-4">
@@ -342,176 +402,189 @@ export default function SubmitPage() {
               </Link>
             </div>
           ) : (
-            <Form {...form}>
-              <form
-                action={(formData) => onSubmit(form.getValues(), formData)}
-                className="space-y-8"
-                encType="multipart/form-data"
-              >
-                <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-md">
-                  <p className="text-amber-800">
-                    <strong>Note:</strong> Submission period is open from March
-                    5, 2025 00:00 to March 6, 2025 00:00. You can update your
-                    submission any time during this period.
-                  </p>
-                </div>
+            <>
+              {teamInfo && (
+                <Alert className="mb-6 bg-primary/10 border-primary/20">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  <AlertTitle>Team Validated</AlertTitle>
+                  <AlertDescription>
+                    Submitting for team: <strong>{teamInfo.name}</strong>
+                  </AlertDescription>
+                </Alert>
+              )}
 
-                <input type="hidden" name="teamId" value={teamId || ""} />
-
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-md mb-6">
-                  <p className="text-blue-800">
-                    <strong>Important:</strong> You must provide at least one
-                    URL or upload a project file.
-                  </p>
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="githubUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>GitHub Repository URL (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://github.com/username/repo"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Link to your project&apos;s GitHub repository
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="deployedUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Deployed Project URL (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://your-project.vercel.app"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Link to your deployed project if available
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="presentationUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Figma or Presentation URL (Optional)
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://figma.com/file/..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Link to your design or presentation
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="border-t border-gray-200 pt-6">
-                  <FormLabel>Project Files (Optional, max 30MB)</FormLabel>
-                  <div className="mt-2">
-                    <div className="flex items-center justify-center w-full">
-                      <label
-                        htmlFor="file-upload"
-                        className={`flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg cursor-pointer 
-                          ${
-                            file
-                              ? "border-primary/50 bg-primary/5"
-                              : "border-gray-300 bg-gray-50 hover:bg-gray-100"
-                          }`}
-                      >
-                        {file ? (
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6 text-primary">
-                            <CheckCircle2 className="w-8 h-8 mb-2" />
-                            <p className="font-semibold">{file.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {(file.size / 1024 / 1024).toFixed(2)} MB
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <Upload className="w-8 h-8 mb-2 text-gray-500" />
-                            <p className="text-sm text-gray-500">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
-                              or drag and drop
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              ZIP, PDF, PPTX, or other project files (MAX 30MB)
-                            </p>
-                          </div>
-                        )}
-                        <input
-                          id="file-upload"
-                          name="file"
-                          type="file"
-                          className="hidden"
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                  {file && (
-                    <div className="mt-2 flex items-center">
-                      <FileText className="w-4 h-4 mr-2 text-primary" />
-                      <span className="text-sm font-medium">{file.name}</span>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="ml-auto text-red-500 hover:text-red-700"
-                        onClick={handleFileRemove}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={
-                    pending ||
-                    (!file &&
-                      !watchedValues.githubUrl &&
-                      !watchedValues.deployedUrl &&
-                      !watchedValues.presentationUrl)
-                  }
+              <Form {...form}>
+                <form
+                  action={(formData) => onSubmit(form.getValues(), formData)}
+                  className="space-y-8"
+                  encType="multipart/form-data"
                 >
-                  {pending ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    "Submit Project"
-                  )}
-                </Button>
-              </form>
-            </Form>
+                  <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-md">
+                    <p className="text-amber-800">
+                      <strong>Note:</strong> Submission period is open from
+                      March 5, 2025 00:00 to March 6, 2025 00:00. You can update
+                      your submission any time during this period.
+                    </p>
+                  </div>
+
+                  <input type="hidden" name="teamId" value={teamId || ""} />
+
+                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-md mb-6">
+                    <p className="text-blue-800">
+                      <strong>Important:</strong> You must provide at least one
+                      URL or upload a project file.
+                    </p>
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="githubUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>GitHub Repository URL (Optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://github.com/username/repo"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Link to your project&apos;s GitHub repository
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="deployedUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Deployed Project URL (Optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://your-project.vercel.app"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Link to your deployed project if available
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="presentationUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Figma or Presentation URL (Optional)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://figma.com/file/..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Link to your design or presentation
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="border-t border-gray-200 pt-6">
+                    <FormLabel>Project Files (Optional, max 30MB)</FormLabel>
+                    <div className="mt-2">
+                      <div className="flex items-center justify-center w-full">
+                        <label
+                          htmlFor="file-upload"
+                          className={`flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg cursor-pointer 
+                            ${
+                              file
+                                ? "border-primary/50 bg-primary/5"
+                                : "border-gray-300 bg-gray-50 hover:bg-gray-100"
+                            }`}
+                        >
+                          {file ? (
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6 text-primary">
+                              <CheckCircle2 className="w-8 h-8 mb-2" />
+                              <p className="font-semibold">{file.name}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                              <Upload className="w-8 h-8 mb-2 text-gray-500" />
+                              <p className="text-sm text-gray-500">
+                                <span className="font-semibold">
+                                  Click to upload
+                                </span>{" "}
+                                or drag and drop
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                ZIP, PDF, PPTX, or other project files (MAX
+                                30MB)
+                              </p>
+                            </div>
+                          )}
+                          <input
+                            id="file-upload"
+                            name="file"
+                            type="file"
+                            className="hidden"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                          />
+                        </label>
+                      </div>
+                    </div>
+                    {file && (
+                      <div className="mt-2 flex items-center">
+                        <FileText className="w-4 h-4 mr-2 text-primary" />
+                        <span className="text-sm font-medium">{file.name}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="ml-auto text-red-500 hover:text-red-700"
+                          onClick={handleFileRemove}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={
+                      pending ||
+                      (!file &&
+                        !watchedValues.githubUrl &&
+                        !watchedValues.deployedUrl &&
+                        !watchedValues.presentationUrl)
+                    }
+                  >
+                    {pending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      "Submit Project"
+                    )}
+                  </Button>
+                </form>
+              </Form>
+            </>
           )}
         </div>
       </div>
@@ -519,7 +592,8 @@ export default function SubmitPage() {
       <Dialog
         open={isTeamIdDialogOpen}
         onOpenChange={(open) => {
-          if (teamId) {
+          // Only allow closing the dialog if a valid teamId exists
+          if (isTeamIdValid) {
             setIsTeamIdDialogOpen(open);
           }
         }}
