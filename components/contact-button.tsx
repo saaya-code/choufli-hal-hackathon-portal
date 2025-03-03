@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Users } from "lucide-react";
+import { Phone } from "lucide-react";
 
 export function ContactButton() {
   return (
@@ -15,7 +15,7 @@ export function ContactButton() {
           ?.scrollIntoView({ behavior: "smooth" });
       }}
     >
-      <Users className="h-6 w-6 mr-2" />
+      <Phone className="h-6 w-6 mr-2" />
       Contact Us
     </Button>
   );

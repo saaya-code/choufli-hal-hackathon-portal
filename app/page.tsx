@@ -274,6 +274,7 @@ export default function LandingPage() {
                   size="lg"
                   className="bg-primary text-white hover:bg-primary/90 w-full sm:w-auto"
                 >
+                  <UserPen className="h-6 w-6 mr-2" />
                   Register Now
                 </Button>
               </Link>
@@ -281,8 +282,9 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-primary text-primary hover:bg-primary/10 w-full sm:w-auto"
+                  className="border-primary text-primary hover:text-primary hover:bg-primary/10 w-full sm:w-auto"
                 >
+                  <FileInput className="h-6 w-6 mr-2" />
                   Submit Your Project
                 </Button>
               </Link>
