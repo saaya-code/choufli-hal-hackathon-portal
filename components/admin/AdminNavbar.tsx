@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Menu, X, Users, Home, Clock } from "lucide-react";
+import { Menu, X, Users, Home, Clock, Send } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,6 +32,12 @@ export function AdminNavbar() {
     },
     { id: "teams", label: "Teams", href: "/admin/teams", icon: Users },
     { id: "waitlist", label: "Waitlist", href: "/admin/waitlist", icon: Clock },
+    {
+      id: "submissions",
+      label: "Submissions",
+      href: "/admin/submissions",
+      icon: Send,
+    },
   ];
 
   const isActive = (path: string) => pathname === path;

@@ -107,6 +107,14 @@ export function Navbar() {
                 {item.label}
               </Button>
             ))}
+            <Link href="/submit">
+              <Button
+                variant="outline"
+                className="text-primary border-primary hover:bg-primary/10 hover:text-primary ml-2"
+              >
+                Submit Project
+              </Button>
+            </Link>
             <Link href="/register">
               <Button
                 variant="default"
@@ -166,6 +174,15 @@ export function Navbar() {
                     {item.label}
                   </Button>
                 ))}
+                <Link href="/submit" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="w-full text-primary border-primary hover:bg-primary/10"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Submit Project
+                  </Button>
+                </Link>
                 <Link href="/register" className="w-full">
                   <Button
                     variant="default"
