@@ -1,11 +1,10 @@
 import { Navbar } from "@/components/navbar";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { Button } from "@/components/ui/button";
-import { MoonIcon, StarIcon } from "lucide-react";
+import { FileInput, MoonIcon, StarIcon, UserPen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ImageGallery } from "@/components/image-gallery";
-// import { SponsorsSection } from "@/components/sponsors-section";
 import { TimelineSection } from "@/components/timeline-section";
 import { VideoTrailer } from "@/components/video-trailer";
 import Footer from "@/components/footer";
@@ -70,16 +69,29 @@ export default function LandingPage() {
               Join us this Ramadan for an unforgettable hackathon experience
               inspired by Tunisia&apos;s beloved sitcom
             </p>
-            <div className="flex items-center justify-center gap-4">
-              <Link href="/register">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+              <Link href="/register" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="bg-primary text-white hover:bg-primary/90"
+                  className="bg-primary text-white hover:bg-primary/90 w-full sm:w-auto"
                 >
+                  <UserPen className="h-6 w-6 mr-2" />
                   Register Now
                 </Button>
               </Link>
-              <ContactButton />
+              <Link href="/submit" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/10 hover:text-primary w-full sm:w-auto"
+                >
+                  <FileInput className="h-6 w-6 mr-2" />
+                  Submit Project
+                </Button>
+              </Link>
+              <div className="w-full sm:w-auto">
+                <ContactButton />
+              </div>
             </div>
           </div>
         </div>
@@ -241,7 +253,7 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-      
+
       {/* Sponsors Section */}
       <SponsorsSection />
 
@@ -256,13 +268,22 @@ export default function LandingPage() {
               Don&apos;t miss out on this unique opportunity to be part of
               Choufli Hal 2.0
             </p>
-            <div className="flex justify-center gap-4">
-              <Link href="/register">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+              <Link href="/register" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="bg-primary text-white hover:bg-primary/90"
+                  className="bg-primary text-white hover:bg-primary/90 w-full sm:w-auto"
                 >
                   Register Now
+                </Button>
+              </Link>
+              <Link href="/submit" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/10 w-full sm:w-auto"
+                >
+                  Submit Your Project
                 </Button>
               </Link>
             </div>
