@@ -7,7 +7,7 @@ export async function GET() {
   try {    
     await connectToDatabase();
     
-    const submissions = await Submission.find().sort({ submittedAt: -1 });
+    const submissions = await Submission.find().sort({ submittedAt: -1 }).lean();
     const submissionsCount = await Submission.countDocuments();
     
     const enrichedSubmissions = await Promise.all(submissions.map(async (submission) => {
