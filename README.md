@@ -9,7 +9,9 @@ A modern, feature-rich hackathon registration portal built for Google Developer 
 - **Interactive Landing Page**: Engaging, culturally themed design with event information
 - **Team Registration**: Support for teams of 1-4 members
 - **Waitlist Management**: Automatic waitlisting when registration cap is reached
-- **Admin Dashboard**: Comprehensive management of teams and registrations
+- **Project Submissions**: Multiple submission methods with file uploads and URL sharing
+- **Submission Management**: Time-controlled submission periods with admin controls
+- **Admin Dashboard**: Comprehensive management of teams, registrations, and submissions
 - **Responsive Design**: Optimized for all devices
 - **Real-time Statistics**: Track registration numbers and participant data
 
@@ -22,6 +24,7 @@ A modern, feature-rich hackathon registration portal built for Google Developer 
 - **Database**: [MongoDB](https://www.mongodb.com/)
 - **Form Handling**: [React Hook Form](https://react-hook-form.com/) with [Zod](https://github.com/colinhacks/zod)
 - **Data Fetching**: [TanStack Query](https://tanstack.com/query)
+- **File Storage**: Server-based storage for project submissions with [Supabase](https://supabase.com)
 
 ## 📋 Prerequisites
 
@@ -66,6 +69,8 @@ ADMIN_PASSWORD=secure-password
 BASE_URL=http://localhost:3000
 GMAIL_USER=your-email@gmail.com
 GMAIL_PASS=your-app-password
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+SUPABASE_KEY=your-supabase-key
 ```
 
 ### 4. Run the development server
@@ -86,6 +91,11 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 
 - **Home**: Landing page with event information
 - **Registration**: Team registration form with automatic waitlisting
+- **Submissions**: Project submission system with multiple upload options:
+  - GitHub repository links
+  - Deployed project URLs
+  - Presentation/design links (Figma, slides, etc.)
+  - File uploads (up to 30MB) for code, PDFs, or presentations
 
 ### Admin Dashboard
 
@@ -95,6 +105,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
    - Dashboard: Overview of registrations and waitlist
    - Teams: Detailed list of registered teams
    - Waitlist: Manage teams on the waitlist
+   - Submissions: Review and manage team project submissions, control submission period
 
 ## 📁 Project Structure
 
@@ -122,6 +133,15 @@ To access the admin dashboard:
 1. Navigate to `/admin/login`
 2. Log in with the credentials specified in your environment variables
 3. Manage registrations, view statistics, and handle the waitlist
+4. Control submission periods and review team submissions
+
+### Managing Submissions
+
+Admins have special controls for the submission system:
+- Enable/disable the submission period
+- View all team submissions with search and filtering
+- Download submitted project files
+- Access links to GitHub repositories, deployed projects, and presentations
 
 ## 🔧 Customization
 
@@ -129,13 +149,10 @@ To access the admin dashboard:
 - Modify the maximum team limit in the registration page
 - Customize the timeline and event details in the respective components
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 👥 Contributors
 
-- Google Developer Group ISSAT Sousse
+- [Aziz Bouali](https://github.com/saaya-code)
+- [Daly Chouikh](https://github.com/DalyChouikh)
 
 ## 🌟 Acknowledgments
 
