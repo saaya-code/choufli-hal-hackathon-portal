@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { Button } from "@/components/ui/button";
-import { FileInput, MoonIcon, StarIcon, UserPen } from "lucide-react";
+import { MoonIcon, StarIcon, UserPen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ImageGallery } from "@/components/image-gallery";
@@ -10,6 +10,8 @@ import { VideoTrailer } from "@/components/video-trailer";
 import Footer from "@/components/footer";
 import { ContactButton } from "@/components/contact-button";
 import { SponsorsSection } from "@/components/sponsors-section";
+import { SubmitButton } from "@/components/submit-button";
+import { ChallengeButton } from "@/components/challenge-button";
 
 export default function LandingPage() {
   return (
@@ -79,16 +81,18 @@ export default function LandingPage() {
                   Register Now
                 </Button>
               </Link>
-              <Link href="/submit" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-primary text-primary hover:bg-primary/10 hover:text-primary w-full sm:w-auto"
-                >
-                  <FileInput className="h-6 w-6 mr-2" />
-                  Submit Project
-                </Button>
-              </Link>
+              <ChallengeButton
+                size="lg"
+                showIcon={true}
+                className="w-full sm:w-auto"
+                mobile
+              />
+              <SubmitButton
+                size="lg"
+                showIcon={true}
+                className="w-full sm:w-auto"
+                mobile
+              />
               <div className="w-full sm:w-auto">
                 <ContactButton />
               </div>
@@ -278,16 +282,18 @@ export default function LandingPage() {
                   Register Now
                 </Button>
               </Link>
-              <Link href="/submit" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-primary text-primary hover:text-primary hover:bg-primary/10 w-full sm:w-auto"
-                >
-                  <FileInput className="h-6 w-6 mr-2" />
-                  Submit Your Project
-                </Button>
-              </Link>
+              <ChallengeButton
+                size="lg"
+                showIcon={true}
+                className="w-full sm:w-auto"
+                mobile
+              />
+              <SubmitButton
+                size="lg"
+                showIcon={true}
+                className="w-full sm:w-auto"
+                mobile
+              />
             </div>
           </div>
         </div>
