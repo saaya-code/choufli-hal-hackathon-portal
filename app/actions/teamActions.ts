@@ -70,7 +70,8 @@ export async function registerTeam(initialState: unknown, formData: FormData) {
     await sendEmail({
       to: teamMembers.map(member => member.email).join(', '),
       subject: 'Choufli Hal 2.0 - Participation Confirmed!',
-      html: participationEmailTemplate(teamName, teamMembers.map(t=>t.name), process.env.BASE_URL+"/contact")
+      message: participationEmailTemplate(teamName, teamMembers.map(t=>t.name), process.env.BASE_URL+"/contact"),
+      isHtml: true
     });
     
     revalidatePath('/')
@@ -137,7 +138,8 @@ export async function registerTeamToWaitList(initialState: unknown, formData: Fo
     await sendEmail({
       to: teamMembers.map(member => member.email).join(', '),
       subject: 'Choufli Hal 2.0 - Successfully added to the waitlist!',
-      html: waitlistEmailTemplate(teamName, numberOfWaitlistedTeams, process.env.BASE_URL+"/contact")
+      message: waitlistEmailTemplate(teamName, numberOfWaitlistedTeams, process.env.BASE_URL+"/contact"),
+      isHtml: true
     });
 
     return {

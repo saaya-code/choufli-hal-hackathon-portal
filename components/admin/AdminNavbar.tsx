@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Menu, X, Users, Home, Clock, Send } from "lucide-react";
+import { Menu, X, Users, Home, Clock, Send, Mail } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -37,6 +37,12 @@ export function AdminNavbar() {
       label: "Submissions",
       href: "/admin/submissions",
       icon: Send,
+    },
+    {
+      id: "email",
+      label: "Email",
+      href: "/admin/email",
+      icon: Mail,
     },
   ];
 
