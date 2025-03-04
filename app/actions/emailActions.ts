@@ -11,6 +11,8 @@ type SendBulkEmailParams = {
   message: string;
   isHtml?: boolean;
   useTemplateVars?: boolean;
+  batchSize?: number;
+  batchDelay?: number;
 };
 
 export async function sendBulkEmail({
@@ -19,6 +21,8 @@ export async function sendBulkEmail({
   message,
   isHtml = false,
   useTemplateVars = true,
+  batchSize = 1,
+  batchDelay = 1000,
 }: SendBulkEmailParams) {
   try {
     if (!teamIds || teamIds.length === 0) {
@@ -56,6 +60,7 @@ export async function sendBulkEmail({
 
     let successCount = 0;
     let failureCount = 0;
+    const emailQueue = [];
 
     for (const team of allTeams) {
       const teamData = {
@@ -88,23 +93,39 @@ export async function sendBulkEmail({
           });
         }
         
+        emailQueue.push({
+          to: member.email,
+          subject: personalizedSubject,
+          message: personalizedMessage,
+          isHtml,
+        });
+      }
+    }
+
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+    
+    for (let i = 0; i < emailQueue.length; i += batchSize) {
+      const batch = emailQueue.slice(i, i + batchSize);
+      const batchPromises = batch.map(async (emailData) => {
         try {
-          const result = await sendEmail({
-            to: member.email,
-            subject: personalizedSubject,
-            message: personalizedMessage,
-            isHtml,
-          });
-          
+          const result = await sendEmail(emailData);
           if (result.success) {
             successCount++;
           } else {
             failureCount++;
           }
+          return result;
         } catch (error) {
-          console.error(`Failed to send email to ${member.email}:`, error);
+          console.error(`Failed to send email to ${emailData.to}:`, error);
           failureCount++;
+          return { success: false, error };
         }
+      });
+
+      await Promise.all(batchPromises);
+      
+      if (i + batchSize < emailQueue.length) {
+        await sleep(batchDelay);
       }
     }
 
