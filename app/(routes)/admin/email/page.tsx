@@ -20,16 +20,12 @@ export default function AdminEmailPage() {
 
   const handleTeamsSelected = (teamIds: string[]) => {
     setSelectedTeams(teamIds);
-    if (teamIds.length > 0) {
-      toast({
-        title: `${teamIds.length} teams selected`,
-        description: "Recipients updated for your email",
-      });
-    } else {
+    if (teamIds.length <= 0) {
       toast({
         variant: "destructive",
         title: "No teams selected",
         description: "Please select at least one team to send an email",
+        duration: 500,
       });
     }
   };
