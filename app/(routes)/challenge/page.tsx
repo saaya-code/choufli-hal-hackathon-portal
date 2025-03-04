@@ -118,8 +118,12 @@ export default function ChallengePage() {
                   Must address a real cultural heritage preservation challenge
                 </span>
               </li>
-              
+              <br/>
+              <span className="text-sm text-muted-foreground">
+                  Any significant technical advancement or innovative approach will be positively evaluated
+                </span>
             </ul>
+            
           </CardContent>
         </Card>
 
