@@ -110,7 +110,7 @@ export default function ChallengePage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <h3 className="font-semibold">Technical Innovation (40%)</h3>
+                <h3 className="font-semibold">Technical Innovation (35%)</h3>
                 <p className="text-muted-foreground">Creativity and technical complexity of the solution</p>
               </div>
               <div className="space-y-2">
@@ -118,11 +118,11 @@ export default function ChallengePage() {
                 <p className="text-muted-foreground">Potential impact on cultural heritage preservation</p>
               </div>
               <div className="space-y-2">
-                <h3 className="font-semibold">Feasibility (20%)</h3>
+                <h3 className="font-semibold">Feasibility (10%)</h3>
                 <p className="text-muted-foreground">Implementation practicality and scalability</p>
               </div>
               <div className="space-y-2">
-                <h3 className="font-semibold">Presentation (10%)</h3>
+                <h3 className="font-semibold">Presentation (25%)</h3>
                 <p className="text-muted-foreground">Quality of demonstration and documentation</p>
               </div>
             </div>
