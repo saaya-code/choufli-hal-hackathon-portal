@@ -40,7 +40,6 @@ type EmailComposerProps = {
   onEmailSent: (success: boolean, message: string) => void;
 };
 
-// List of available template variables
 const templateVariables = [
   {
     name: "{{teamName}}",
@@ -103,7 +102,7 @@ export function EmailComposer({
         teamIds: selectedTeams,
         subject: values.subject,
         message: values.message,
-        isHtml: isHtmlMode,
+        isHtml: true,
         useTemplateVars: true,
       });
 
@@ -131,7 +130,6 @@ export function EmailComposer({
     }
   };
 
-  // Insert a template variable at current cursor position
   const insertTemplateVar = (variable: string) => {
     const message = form.getValues("message");
     const textarea = textareaRef[0];
@@ -144,46 +142,14 @@ export function EmailComposer({
       const newValue = textBefore + variable + textAfter;
       form.setValue("message", newValue);
 
-      // Move cursor after inserted variable
       setTimeout(() => {
         textarea.focus();
         const newCursorPos = cursorPos + variable.length;
         textarea.setSelectionRange(newCursorPos, newCursorPos);
       }, 0);
     } else {
-      // Fallback for when we don't have direct textarea access
       form.setValue("message", message + " " + variable);
     }
-  };
-
-  const createExampleEmail = (useHtml: boolean) => {
-    const template = useHtml
-      ? `<html><div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-  <h2>Hello {{teamName}}!</h2>
-  <p>Thank you for participating in Choufli Hal Hackathon!</p>
-  <p>Your team ID is: <strong>{{teamId}}</strong></p>
-  <p>Please keep this ID handy for future reference.</p>
-  <hr>
-  <p>Team members: {{allMembers}}</p>
-  <p>Best regards,<br>The Organizing Team</p>
-</div></html>`
-      : `Hello {{teamName}}!
-
-Thank you for participating in Choufli Hal Hackathon!
-
-Your team ID is: {{teamId}}
-
-Please keep this ID handy for future reference.
-
-Team members: {{allMembers}}
-
-Best regards,
-The Organizing Team`;
-
-    form.setValue("subject", "Important Information: Your Team ID");
-    form.setValue("message", template);
-    setIsHtmlMode(useHtml);
-    form.clearErrors();
   };
 
   return (
@@ -393,9 +359,33 @@ The Organizing Team`;
               );
               form.setValue(
                 "message",
-                "Dear {{teamName}} team,\n\nWe have an important update regarding the Choufli Hal Hackathon schedule.\n\nBest regards,\nThe Organizing Team"
+                `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                  <div style="background-color: #E6EFFF; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+                    <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
+                  </div>
+                  <div style="padding: 20px;">
+                    <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Important Update</h1>
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                      Dear <strong>{{teamName}}</strong> team,<br><br>
+                      We have an important update regarding the <strong>Choufli Hal 2.0 Hackathon</strong> schedule.
+                    </p>
+                    <div style="background-color: #f9f9f9; border-left: 4px solid #8B3E16; padding: 15px; margin-bottom: 20px;">
+                      <p style="margin: 0; font-size: 16px; line-height: 1.5;">
+                        [Insert your schedule update details here]
+                      </p>
+                    </div>
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                      Best regards,<br>
+                      Google Developer Group On Campus ISSAT Sousse
+                    </p>
+                    <a href="#" style="display: inline-block; background-color: #8B3E16; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold;">Contact Us</a>
+                  </div>
+                  <div style="background-color: #F5F5F5; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px;">
+                    <p>&copy; 2025 Choufli Hal Bootcamp 2.0. All rights reserved.</p>
+                  </div>
+                </div>`
               );
-              setIsHtmlMode(false);
+              setIsHtmlMode(true);
               form.clearErrors();
             }}
           >
@@ -411,9 +401,38 @@ The Organizing Team`;
               );
               form.setValue(
                 "message",
-                "Dear {{teamName}} team,\n\nThis is a friendly reminder that project submissions are due soon. Please ensure you submit your project on time using your team ID: {{teamId}}.\n\nBest regards,\nThe Organizing Team"
+                `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+      <div style="background-color: #E6EFFF; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
+      </div>
+      <div style="padding: 20px;">
+        <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Submission Reminder</h1>
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          Dear <strong>{{teamName}}</strong> team,<br><br>
+          This is a friendly reminder that project submissions for the <strong>Choufli Hal 2.0 Hackathon</strong> are due soon. Please ensure you submit your project on time.
+        </p>
+        <div style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+          <p style="margin: 0; font-size: 16px; margin-bottom: 10px;">Your team ID is:</p>
+          <p style="margin: 0; font-weight: bold; font-size: 18px; color: #8B3E16; text-align: center; padding: 10px; border: 1px dashed #8B3E16; border-radius: 5px;">{{teamId}}</p>
+          <p style="margin: 10px 0 0 0; font-size: 14px; text-align: center;">Please keep this ID handy for future reference. You will need to enter it if prompted for a Team ID in the submit page</p>
+        </div>
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          If you have any questions or need assistance with your submission, please reach out to our support team.
+        </p>
+        <div style="text-align: center;">
+          <a href="https://gdg-on-campus-issatso.tn/submit?teamId={{teamId}}" style="display: inline-block; background-color: #8B3E16; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold;">Submit Your Project</a>
+        </div>
+        <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">
+          Best regards,<br>
+          Google Developer Group On Campus ISSAT Sousse
+        </p>
+      </div>
+      <div style="background-color: #F5F5F5; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px;">
+        <p>&copy; 2025 Choufli Hal Bootcamp 2.0. All rights reserved.</p>
+      </div>
+    </div>`
               );
-              setIsHtmlMode(false);
+              setIsHtmlMode(true);
               form.clearErrors();
             }}
           >
@@ -422,16 +441,46 @@ The Organizing Team`;
           <Button
             variant="outline"
             size="sm"
-            onClick={() => createExampleEmail(true)}
+            onClick={() => {
+              form.setValue("subject", "Important Information: Your Team ID");
+              form.setValue(
+                "message",
+                `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+              <div style="background-color: #E6EFFF; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+                <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
+              </div>
+              <div style="padding: 20px;">
+                <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Hello {{teamName}}!</h1>
+                <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                  Thank you for participating in the <strong>Choufli Hal 2.0 Hackathon</strong>!
+                </p>
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                  <p style="margin: 0 0 10px 0; font-size: 16px;">Your team ID is:</p>
+                  <p style="margin: 0; font-size: 20px; font-weight: bold; color: #8B3E16; text-align: center; padding: 10px; border: 1px dashed #8B3E16; border-radius: 5px;">{{teamId}}</p>
+                  <p style="margin: 10px 0 0 0; font-size: 14px; text-align: center;">Please keep this ID handy for future reference. You will need to enter it if prompted for a Team ID in the submit page</p>
+                </div>
+                <div style="margin-bottom: 20px;">
+                  <h2 style="color: #8B3E16; font-size: 18px; margin-bottom: 10px;">Team Members:</h2>
+                  <p style="margin: 0; font-size: 16px;">{{allMembers}}</p>
+                </div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                  <a href="https://gdg-on-campus-issatso.tn/submit?teamId={{teamId}}" style="display: inline-block; background-color: #8B3E16; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold; margin-right: 10px;">Submit Your Project</a>
+                  <a href="https://gdg-on-campus-issatso.tn/challenge" style="display: inline-block; background-color: #4285F4; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold;">View Challenge</a>
+                </div>
+                <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                  Best regards,<br>Google Developer Group On Campus ISSAT Sousse
+                </p>
+              </div>
+              <div style="background-color: #F5F5F5; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px;">
+                <p>&copy; 2025 Choufli Hal Bootcamp 2.0. All rights reserved.</p>
+              </div>
+            </div>`
+              );
+              setIsHtmlMode(true);
+              form.clearErrors();
+            }}
           >
-            Team ID Template (HTML)
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => createExampleEmail(false)}
-          >
-            Team ID Template (Text)
+            Team ID Template
           </Button>
         </div>
       </div>
