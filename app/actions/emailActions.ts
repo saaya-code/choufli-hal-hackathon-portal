@@ -3,7 +3,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { Team } from "@/models/Team";
 import { Waitlist } from "@/models/WaitlistTeam";
-import { sendEmail } from "@/lib/email";
+import { sendEmail } from "@/lib/mail";
 
 type SendBulkEmailParams = {
   teamIds: string[];
