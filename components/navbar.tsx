@@ -5,7 +5,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, UserPen, X } from "lucide-react";
+import { SubmitButton } from "@/components/submit-button";
+import { ChallengeButton } from "@/components/challenge-button";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -107,19 +109,14 @@ export function Navbar() {
                 {item.label}
               </Button>
             ))}
-            <Link href="/submit">
-              <Button
-                variant="outline"
-                className="text-primary border-primary hover:bg-primary/10 hover:text-primary ml-2"
-              >
-                Submit Project
-              </Button>
-            </Link>
+            <ChallengeButton className="ml-2" />
+            <SubmitButton className="ml-2" />
             <Link href="/register">
               <Button
                 variant="default"
                 className="bg-primary text-white hover:bg-primary/90 ml-2"
               >
+                <UserPen className="h-4 w-4 mr-2" />
                 Register Now
               </Button>
             </Link>
@@ -174,21 +171,15 @@ export function Navbar() {
                     {item.label}
                   </Button>
                 ))}
-                <Link href="/submit" className="w-full">
-                  <Button
-                    variant="outline"
-                    className="w-full text-primary border-primary hover:bg-primary/10"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Submit Project
-                  </Button>
-                </Link>
+                <ChallengeButton variant="outline" mobile fullWidth />
+                <SubmitButton variant="outline" mobile fullWidth />
                 <Link href="/register" className="w-full">
                   <Button
                     variant="default"
                     className="w-full bg-primary text-white hover:bg-primary/90"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
+                    <UserPen className="h-4 w-4 mr-2" />
                     Register Now
                   </Button>
                 </Link>
