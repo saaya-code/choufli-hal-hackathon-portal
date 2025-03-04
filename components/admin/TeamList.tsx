@@ -16,13 +16,28 @@ import { Badge } from "@/components/ui/badge";
 import { ITeam } from "@/models/Team";
 import { IWaitlist } from "@/models/WaitlistTeam";
 import { formatDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface TeamListProps {
   teams: Array<ITeam | IWaitlist>;
   type: "registered" | "waitlist";
+  setFilteredTeams?: (teams: Array<ITeam | IWaitlist>) => void;
 }
 
 export function TeamList({ teams, type }: TeamListProps) {
+  const acceptTeam = async (teamId: string) => {
+    try {
+      const response = await fetch(`/api/admin/waitlist/${teamId}`, {
+        method: "PATCH",
+      });
+      if (!response.ok) throw new Error("Failed to accept team");
+      window.location.reload();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error(err?.message);
+    }
+    alert('Team accepted successfully');
+  };
   if (!teams || teams.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
@@ -74,7 +89,22 @@ export function TeamList({ teams, type }: TeamListProps) {
                 </Accordion>
               </TableCell>
               {type === "waitlist" && "registeredAt" in team && (
-                <TableCell>{formatDate(team.registeredAt)}</TableCell>
+                <>
+                  <TableCell>{formatDate(team.registeredAt)}</TableCell>
+                  <TableCell>
+                    <Button
+                      size="lg"
+                      className="bg-primary text-white hover:bg-primary/90"
+                      onClick={() => {
+                        if (window.confirm('Are you sure you want to accept this team?')) {
+                          acceptTeam(team._id as string);
+                        }
+                      }}
+                    >
+                      Accept Team
+                    </Button>
+                  </TableCell>
+                </>
               )}
             </TableRow>
           ))}
