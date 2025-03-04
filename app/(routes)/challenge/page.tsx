@@ -1,8 +1,12 @@
-'use client'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+"use client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ChevronLeft, Send } from "lucide-react";
+
 export default function ChallengePage() {
   const [submittionStatus, setSubmittionStatus] = useState(false);
   useEffect(() => {
@@ -21,9 +25,26 @@ export default function ChallengePage() {
 
     fetchSubmissionStatus();
   }, []);
-  return (
-    submittionStatus ? 
+  return submittionStatus ? (
     <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <Link href="/">
+          <Button
+            variant="ghost"
+            className="flex items-center hover:text-primary"
+          >
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
+        </Link>
+        <Link href="/submit">
+          <Button className="bg-primary text-white hover:bg-primary/90">
+            <Send className="mr-2 h-4 w-4" />
+            Submit Project
+          </Button>
+        </Link>
+      </div>
+
       <div className="space-y-6">
         {/* Header Section */}
         <div className="text-center space-y-4">
@@ -47,30 +68,33 @@ export default function ChallengePage() {
               <Badge variant="secondary">AI/ML</Badge>
             </div>
             <p className="text-lg leading-relaxed">
-              Develop innovative technological solutions that help preserve and promote
-              Tunisian cultural heritage. Your solution can address one or more of
-              the following areas:
+              Develop innovative technological solutions that help preserve and
+              promote Tunisian cultural heritage. Your solution can address one
+              or more of the following areas:
             </p>
 
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>Digital archiving and 3D scanning of cultural artifacts</li>
               <li>Interactive educational platforms with gamification</li>
-              <li>AI-powered heritage preservation tools including:
-              <ul className="list-circle list-inside ml-6 mt-2 space-y-1">
-              <li>Computer vision for artifact restoration</li>
-              <li>Machine learning for pattern recognition in ancient texts</li>
-              <li>Predictive maintenance for historical buildings</li>
-              <li>NLP for traditional storytelling preservation</li>
-              </ul>
+              <li>
+                AI-powered heritage preservation tools including:
+                <ul className="list-circle list-inside ml-6 mt-2 space-y-1">
+                  <li>Computer vision for artifact restoration</li>
+                  <li>
+                    Machine learning for pattern recognition in ancient texts
+                  </li>
+                  <li>Predictive maintenance for historical buildings</li>
+                  <li>NLP for traditional storytelling preservation</li>
+                </ul>
               </li>
               <li>Virtual/Augmented reality immersive experiences</li>
             </ul>
 
             <p className="text-sm text-muted-foreground mt-4">
-              These are just examples to inspire you. We encourage you to think creatively 
-              and develop unique solutions that combine traditional knowledge with modern 
-              technology. Your innovative approach could open new possibilities in cultural 
-              heritage preservation!
+              These are just examples to inspire you. We encourage you to think
+              creatively and develop unique solutions that combine traditional
+              knowledge with modern technology. Your innovative approach could
+              open new possibilities in cultural heritage preservation!
             </p>
           </CardContent>
         </Card>
@@ -84,19 +108,27 @@ export default function ChallengePage() {
             <ul className="space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-secondary">•</span>
-                <span>Solution must be technically innovative and feasible</span>
+                <span>
+                  Solution must be technically innovative and feasible
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary">•</span>
-                <span>Must address a real cultural heritage preservation challenge</span>
+                <span>
+                  Must address a real cultural heritage preservation challenge
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary">•</span>
-                <span>Projects should be completable within the hackathon timeframe</span>
+                <span>
+                  Projects should be completable within the hackathon timeframe
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary">•</span>
-                <span>Teams must submit complete documentation and source code</span>
+                <span>
+                  Teams must submit complete documentation and source code
+                </span>
               </li>
             </ul>
           </CardContent>
@@ -111,28 +143,46 @@ export default function ChallengePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <h3 className="font-semibold">Technical Innovation (35%)</h3>
-                <p className="text-muted-foreground">Creativity and technical complexity of the solution</p>
+                <p className="text-muted-foreground">
+                  Creativity and technical complexity of the solution
+                </p>
               </div>
               <div className="space-y-2">
                 <h3 className="font-semibold">Impact (30%)</h3>
-                <p className="text-muted-foreground">Potential impact on cultural heritage preservation</p>
+                <p className="text-muted-foreground">
+                  Potential impact on cultural heritage preservation
+                </p>
               </div>
               <div className="space-y-2">
                 <h3 className="font-semibold">Feasibility (10%)</h3>
-                <p className="text-muted-foreground">Implementation practicality and scalability</p>
+                <p className="text-muted-foreground">
+                  Implementation practicality and scalability
+                </p>
               </div>
               <div className="space-y-2">
                 <h3 className="font-semibold">Presentation (25%)</h3>
-                <p className="text-muted-foreground">Quality of demonstration and documentation</p>
+                <p className="text-muted-foreground">
+                  Quality of demonstration and documentation
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
-      </div>
-
-    : 
+    </div>
+  ) : (
     <div className="container mx-auto px-4 py-16">
+      <div className="flex justify-start mb-6">
+        <Link href="/">
+          <Button
+            variant="ghost"
+            className="flex items-center hover:text-primary"
+          >
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
+        </Link>
+      </div>
       <Card className="max-w-3xl mx-auto">
         <CardContent className="text-center space-y-6 py-8">
           <div className="rounded-full w-16 h-16 bg-muted flex items-center justify-center mx-auto">
@@ -143,7 +193,7 @@ export default function ChallengePage() {
           </h1>
           <div className="space-y-2">
             <p className="text-lg text-muted-foreground">
-              The  challenge opens on:
+              The challenge opens on:
             </p>
             <p className="text-2xl font-semibold text-primary">
               March 4th, 2025 at 11:59 PM (Tunisia Time)
@@ -151,12 +201,14 @@ export default function ChallengePage() {
           </div>
           <div className="border-t border-border pt-6">
             <p className="text-sm text-muted-foreground">
-              Mark your calendar! The submission window will be open for 24 hours,<br />
+              Mark your calendar! The submission window will be open for 24
+              hours,
+              <br />
               closing on March 5th, 2025 at 11:59 PM (Tunisia Time)
             </p>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
