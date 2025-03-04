@@ -118,18 +118,7 @@ export default function ChallengePage() {
                   Must address a real cultural heritage preservation challenge
                 </span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-secondary">•</span>
-                <span>
-                  Projects should be completable within the hackathon timeframe
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-secondary">•</span>
-                <span>
-                  Teams must submit complete documentation and source code
-                </span>
-              </li>
+              
             </ul>
           </CardContent>
         </Card>
