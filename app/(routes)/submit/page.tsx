@@ -28,6 +28,7 @@ import {
   Search,
   FileCheck,
   AlertTriangle,
+  BookOpen,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -337,12 +338,26 @@ export default function SubmitPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background py-20">
       <div className="container max-w-2xl relative">
-        <Link href="/" className="absolute -top-10 left-0">
-          <Button variant="ghost" className="text-primary hover:bg-primary/10">
-            <ChevronLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Button>
-        </Link>
+        <div className="absolute -top-10 left-0 flex gap-2">
+          <Link href="/">
+            <Button
+              variant="ghost"
+              className="text-primary hover:text-primary hover:bg-primary/10"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Button>
+          </Link>
+          <Link href="/challenge">
+            <Button
+              variant="outline"
+              className="text-primary hover:text-primary hover:bg-primary/10"
+            >
+              <BookOpen className="mr-2 h-4 w-4" />
+              View Challenge
+            </Button>
+          </Link>
+        </div>
 
         <div className="text-center mb-12 relative">
           <div className="relative w-48 h-48 mx-auto mb-8">
