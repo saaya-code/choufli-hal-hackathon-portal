@@ -348,7 +348,154 @@ export function EmailComposer({
       {/* Email Template Suggestions */}
       <div className="mt-8 border-t pt-4">
         <h3 className="font-medium mb-2">Email Templates</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              form.setValue(
+                "subject",
+                "Invitation to Pitch Day: Choufli Hal 2.0 Hackathon"
+              );
+              form.setValue(
+                "message",
+                `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                  <div style="background-color: #E6EFFF; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+                    <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
+                  </div>
+                  <div style="padding: 20px;">
+                    <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Hello {{teamName}}!</h1>
+                    
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                      Thank you for your hard work and dedication in submitting your project for the <strong>Choufli Hal 2.0 Hackathon</strong>. We're impressed with your submission and would like to invite you to pitch your solution at our in-person event!
+                    </p>
+
+                    <div style="background-color: #f9f9f9; border-left: 4px solid #8B3E16; padding: 15px; margin-bottom: 20px;">
+                      <h2 style="color: #8B3E16; font-size: 18px; margin-top: 0;">Event Details:</h2>
+                      <p style="margin: 0 0 5px 0;"><strong>Date:</strong> March 6th, 2024</p>
+                      <p style="margin: 0 0 5px 0;"><strong>Location:</strong> ISSAT Sousse</p>
+                    </div>
+
+                    <h3 style="color: #8B3E16; font-size: 18px;">Event Schedule:</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">17:00 - 17:30</td>
+                        <td style="padding: 8px;">Check-in</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">17:30 - 18:00</td>
+                        <td style="padding: 8px;">Final touches to presentations</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">18:00 - 19:15</td>
+                        <td style="padding: 8px;">Iftar</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">19:15 - 20:30</td>
+                        <td style="padding: 8px;">Coffee Break + Band + Fun activities</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">20:30 - 22:30</td>
+                        <td style="padding: 8px;">Pitching</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px; font-weight: bold;">22:30 - 23:30</td>
+                        <td style="padding: 8px;">Winners announcement + Closure Ceremony</td>
+                      </tr>
+                    </table>
+
+                    <div style="background-color: #FFF5E6; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                      <h3 style="color: #8B3E16; margin-top: 0;">Important Notes:</h3>
+                      <ul style="margin-bottom: 0; padding-left: 20px;">
+                        <li>You may bring any demo materials or prototypes</li>
+                        <li>Don't forget to check in upon arrival</li>
+                      </ul>
+                    </div>
+
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                      We look forward to seeing you and your team at the event. This is your chance to showcase your hard work, network with other participants, and potentially win exciting prizes!
+                    </p>
+                    
+                    <p style="font-size: 16px; line-height: 1.5;">
+                      Best regards,<br>
+                      Google Developer Group On Campus ISSAT Sousse
+                    </p>
+                  </div>
+                  <div style="background-color: #F5F5F5; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px;">
+                    <p>&copy; 2025 Choufli Hal Bootcamp 2.0. All rights reserved.</p>
+                  </div>
+                </div>`
+              );
+              setIsHtmlMode(true);
+              form.clearErrors();
+            }}
+          >
+            Pitch Day Invitation
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              form.setValue(
+                "subject",
+                "DEADLINE EXTENDED: Choufli Hal Hackathon Submission"
+              );
+              form.setValue(
+                "message",
+                `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+      <div style="background-color: #E6EFFF; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
+      </div>
+      <div style="padding: 20px;">
+        <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Submission Deadline Extended!</h1>
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          Dear <strong>{{teamName}}</strong> team,<br><br>
+          Good news! We've decided to extend the submission deadline for the <strong>Choufli Hal 2.0 Hackathon</strong>.
+        </p>
+        
+        <div style="background-color: #FFF5E6; border-left: 4px solid #8B3E16; padding: 20px; margin-bottom: 25px;">
+          <h3 style="color: #8B3E16; font-size: 18px; margin-top: 0; margin-bottom: 10px;">New Submission Deadline:</h3>
+          <p style="font-size: 18px; font-weight: bold; margin: 0; text-align: center;">March 6th, 2025 at 10:00 AM</p>
+        </div>
+        
+        <div style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+          <p style="margin: 0; font-size: 16px; margin-bottom: 10px;">For your reference, your team ID is:</p>
+          <p style="margin: 0; font-weight: bold; font-size: 18px; color: #8B3E16; text-align: center; padding: 10px; border: 1px dashed #8B3E16; border-radius: 5px;">{{teamId}}</p>
+          <p style="margin: 10px 0 0 0; font-size: 14px; text-align: center;">You will need this ID when submitting your project</p>
+        </div>
+        
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          We've extended the deadline to give all teams adequate time to finalize and polish their projects. This is your opportunity to make any final improvements before submission.
+        </p>
+        
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          <strong>Important:</strong> No further extensions will be provided after this date. Please ensure your submission is complete before the new deadline.
+        </p>
+        
+        <div style="text-align: center; margin-bottom: 25px;">
+          <a href="https://gdg-on-campus-issatso.tn/submit?teamId={{teamId}}" style="display: inline-block; background-color: #8B3E16; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold;">Submit Your Project</a>
+        </div>
+        
+        <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">
+          If you have any questions or need technical assistance with your submission, please don't hesitate to contact us.
+        </p>
+        
+        <p style="font-size: 16px; line-height: 1.5;">
+          Best regards,<br>
+          Google Developer Group On Campus ISSAT Sousse
+        </p>
+      </div>
+      <div style="background-color: #F5F5F5; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px;">
+        <p>&copy; 2025 Choufli Hal Bootcamp 2.0. All rights reserved.</p>
+      </div>
+    </div>`
+              );
+              setIsHtmlMode(true);
+              form.clearErrors();
+            }}
+          >
+            Deadline Extension
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -409,8 +556,13 @@ export function EmailComposer({
         <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Submission Reminder</h1>
         <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
           Dear <strong>{{teamName}}</strong> team,<br><br>
-          This is a friendly reminder that project submissions for the <strong>Choufli Hal 2.0 Hackathon</strong> are due soon. Please ensure you submit your project on time.
+          This is a friendly reminder that project submissions for the <strong>Choufli Hal 2.0 Hackathon</strong> are due soon. Please ensure you submit your project by the deadline.
         </p>
+
+        <div style="background-color: #FFF5E6; border-left: 4px solid #8B3E16; padding: 15px; margin-bottom: 20px;">
+          <p style="margin: 0; font-size: 16px; font-weight: bold;">Submission Deadline: March 6th, 2024 at 10:00 AM</p>
+        </div>
+        
         <div style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
           <p style="margin: 0; font-size: 16px; margin-bottom: 10px;">Your team ID is:</p>
           <p style="margin: 0; font-weight: bold; font-size: 18px; color: #8B3E16; text-align: center; padding: 10px; border: 1px dashed #8B3E16; border-radius: 5px;">{{teamId}}</p>
