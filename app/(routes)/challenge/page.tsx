@@ -121,7 +121,7 @@ export default function ChallengePage() {
               <br/>
               <span className="text-sm text-muted-foreground">
                   Any significant technical advancement or innovative approach will be positively evaluated
-                </span>
+              </span>
             </ul>
             
           </CardContent>

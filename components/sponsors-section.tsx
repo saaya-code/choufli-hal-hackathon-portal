@@ -21,6 +21,14 @@ interface Sponsor {
 
 const sponsors: Sponsor[] = [
   {
+    id: 0,
+    name: "Our Dear alumni members 😍",
+    description:
+      "We are proud to have the support of our dear alumnis who have been with us since the beginning of our journey. We are grateful for their continuous support and guidance.",
+    logo: "/gdg-logo.svg",
+    website: "https://gdg.community.dev/gdg-on-campus-higher-institute-of-applied-science-and-technology-sousse-tunisia/",
+  },
+  {
     id: 1,
     name: "Borgi Phones",
     description:
