@@ -364,7 +364,7 @@ export function EmailComposer({
                     <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
                   </div>
                   <div style="padding: 20px;">
-                    <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Congratulations {{teamName}}!</h1>
+                    <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Hello {{teamName}}!</h1>
                     
                     <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
                       Thank you for your hard work and dedication in submitting your project for the <strong>Choufli Hal 2.0 Hackathon</strong>. We're impressed with your submission and would like to invite you to pitch your solution at our in-person event!
@@ -374,7 +374,6 @@ export function EmailComposer({
                       <h2 style="color: #8B3E16; font-size: 18px; margin-top: 0;">Event Details:</h2>
                       <p style="margin: 0 0 5px 0;"><strong>Date:</strong> March 6th, 2024</p>
                       <p style="margin: 0 0 5px 0;"><strong>Location:</strong> ISSAT Sousse</p>
-                      <p style="margin: 0;"><strong>Team ID:</strong> {{teamId}}</p>
                     </div>
 
                     <h3 style="color: #8B3E16; font-size: 18px;">Event Schedule:</h3>
@@ -408,9 +407,6 @@ export function EmailComposer({
                     <div style="background-color: #FFF5E6; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
                       <h3 style="color: #8B3E16; margin-top: 0;">Important Notes:</h3>
                       <ul style="margin-bottom: 0; padding-left: 20px;">
-                        <li>Please bring your team ID and identification</li>
-                        <li>All team members are expected to attend</li>
-                        <li>Each team will have 5 minutes to pitch + 2 minutes for Q&A</li>
                         <li>You may bring any demo materials or prototypes</li>
                         <li>Don't forget to check in upon arrival</li>
                       </ul>
@@ -419,10 +415,6 @@ export function EmailComposer({
                     <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
                       We look forward to seeing you and your team at the event. This is your chance to showcase your hard work, network with other participants, and potentially win exciting prizes!
                     </p>
-
-                    <div style="text-align: center; margin-bottom: 20px;">
-                      <a href="https://gdg-on-campus-issatso.tn/event-details" style="display: inline-block; background-color: #8B3E16; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold; margin-right: 10px;">View Event Details</a>
-                    </div>
                     
                     <p style="font-size: 16px; line-height: 1.5;">
                       Best regards,<br>
