@@ -348,7 +348,98 @@ export function EmailComposer({
       {/* Email Template Suggestions */}
       <div className="mt-8 border-t pt-4">
         <h3 className="font-medium mb-2">Email Templates</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              form.setValue(
+                "subject",
+                "Invitation to Pitch Day: Choufli Hal 2.0 Hackathon"
+              );
+              form.setValue(
+                "message",
+                `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                  <div style="background-color: #E6EFFF; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+                    <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
+                  </div>
+                  <div style="padding: 20px;">
+                    <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Congratulations {{teamName}}!</h1>
+                    
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                      Thank you for your hard work and dedication in submitting your project for the <strong>Choufli Hal 2.0 Hackathon</strong>. We're impressed with your submission and would like to invite you to pitch your solution at our in-person event!
+                    </p>
+
+                    <div style="background-color: #f9f9f9; border-left: 4px solid #8B3E16; padding: 15px; margin-bottom: 20px;">
+                      <h2 style="color: #8B3E16; font-size: 18px; margin-top: 0;">Event Details:</h2>
+                      <p style="margin: 0 0 5px 0;"><strong>Date:</strong> March 6th, 2024</p>
+                      <p style="margin: 0 0 5px 0;"><strong>Location:</strong> ISSAT Sousse</p>
+                      <p style="margin: 0;"><strong>Team ID:</strong> {{teamId}}</p>
+                    </div>
+
+                    <h3 style="color: #8B3E16; font-size: 18px;">Event Schedule:</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">17:00 - 17:30</td>
+                        <td style="padding: 8px;">Check-in</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">17:30 - 18:00</td>
+                        <td style="padding: 8px;">Final touches to presentations</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">18:00 - 19:15</td>
+                        <td style="padding: 8px;">Iftar</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">19:15 - 20:30</td>
+                        <td style="padding: 8px;">Coffee Break + Band + Fun activities</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">20:30 - 22:30</td>
+                        <td style="padding: 8px;">Pitching</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px; font-weight: bold;">22:30 - 23:30</td>
+                        <td style="padding: 8px;">Winners announcement + Closure Ceremony</td>
+                      </tr>
+                    </table>
+
+                    <div style="background-color: #FFF5E6; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                      <h3 style="color: #8B3E16; margin-top: 0;">Important Notes:</h3>
+                      <ul style="margin-bottom: 0; padding-left: 20px;">
+                        <li>Please bring your team ID and identification</li>
+                        <li>All team members are expected to attend</li>
+                        <li>Each team will have 5 minutes to pitch + 2 minutes for Q&A</li>
+                        <li>You may bring any demo materials or prototypes</li>
+                        <li>Don't forget to check in upon arrival</li>
+                      </ul>
+                    </div>
+
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                      We look forward to seeing you and your team at the event. This is your chance to showcase your hard work, network with other participants, and potentially win exciting prizes!
+                    </p>
+
+                    <div style="text-align: center; margin-bottom: 20px;">
+                      <a href="https://gdg-on-campus-issatso.tn/event-details" style="display: inline-block; background-color: #8B3E16; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold; margin-right: 10px;">View Event Details</a>
+                    </div>
+                    
+                    <p style="font-size: 16px; line-height: 1.5;">
+                      Best regards,<br>
+                      Google Developer Group On Campus ISSAT Sousse
+                    </p>
+                  </div>
+                  <div style="background-color: #F5F5F5; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px;">
+                    <p>&copy; 2025 Choufli Hal Bootcamp 2.0. All rights reserved.</p>
+                  </div>
+                </div>`
+              );
+              setIsHtmlMode(true);
+              form.clearErrors();
+            }}
+          >
+            Pitch Day Invitation
+          </Button>
           <Button
             variant="outline"
             size="sm"
