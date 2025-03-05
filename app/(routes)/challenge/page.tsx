@@ -49,7 +49,7 @@ export default function ChallengePage() {
         {/* Header Section */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-foreground">
-            Choufli Hal Challenge 2024
+            Choufli Hal Challenge 2025
           </h1>
           <p className="text-xl text-muted-foreground">
             Innovate Solutions for Cultural Heritage Preservation
