@@ -68,6 +68,13 @@ const sponsors: Sponsor[] = [
     logo: "/sponsors/saf-art-events.png",
     website: "https://www.instagram.com/safart_events",
   },
+  {
+    id: 6,
+    name: "Quarré de chocolat",
+    description: "Quarré de chocolat is a chocolate shop that offers a wide range of delicious chocolates.",
+    logo: "/sponsors/quarre-de-chocolat.jpg",
+    website: "https://www.facebook.com/profile.php?id=100089966927171&mibextid=wwXIfr&rdid=jFfNuYQEKzd1arqJ#",
+  },
 ];
 
 export function SponsorsSection() {
