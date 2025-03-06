@@ -43,19 +43,65 @@ async function uploadFileToSupabase(file: File, teamName: string) {
   };
 }
 
-export async function submitProject(initialState: { message: string, error: string }, formData: FormData) {
+export async function submitProject(formData: FormData) {
   try {
     await connectToDatabase();
-    
-    const settings = await Settings.findOne();
-    if (!settings || !settings.submissionOpen) {
-      return {
-        message: "",
-        error: "Submission period is currently closed. Please check back later."
-      };
-    }
 
-    const teamId = formData.get('teamId') as string;
+    const teamId = formData.get("teamId") as string;
+    
+    if (!teamId) {
+      return { error: "Team ID is required" };
+    }
+    
+    // Check if this is a presentation-only submission
+    const isPresentationOnly = formData.get("presentationOnly") === "true";
+    
+    // Find team for validation
+    const team = await Team.findById(teamId);
+    
+    if (!team) {
+      return { error: "Invalid team ID" };
+    }
+    
+    // If presentation-only submission when main submissions are closed
+    if (isPresentationOnly) {
+      const presentationUrl = formData.get("presentationUrl") as string;
+      
+      if (!presentationUrl) {
+        return { error: "Presentation URL is required" };
+      }
+      
+      // Check if team already has a submission
+      const existingSubmission = await Submission.findOne({ teamId });
+      
+      if (existingSubmission) {
+        // Update existing submission with new presentation URL
+        existingSubmission.presentationUrl = presentationUrl;
+        await existingSubmission.save();
+        
+        return { message: "Presentation URL updated successfully" };
+      } else {
+        // Create a new submission with only the presentation URL
+        const newSubmission = new Submission({
+          teamId,
+          presentationUrl,
+        });
+        
+        await newSubmission.save();
+        
+        return { message: "Presentation URL submitted successfully" };
+      }
+    }
+    
+    // Continue with regular submission logic for when submissions are open
+    // Check if submissions are open
+    const submissionSettings = await Settings.findOne();
+    const submissionOpen = submissionSettings?.submissionOpen ?? false;
+    
+    if (!submissionOpen) {
+      return { error: "Submission period is currently closed" };
+    }
+    
     const githubUrl = formData.get('githubUrl') as string;
     const deployedUrl = formData.get('deployedUrl') as string;
     const presentationUrl = formData.get('presentationUrl') as string;
@@ -68,25 +114,10 @@ export async function submitProject(initialState: { message: string, error: stri
       }
     }
 
-    if (!teamId) {
-      return {
-        message: "",
-        error: "Team ID is required"
-      };
-    }
-
     if (!githubUrl && !deployedUrl && !presentationUrl && !file) {
       return {
         message: "",
         error: "You must provide at least one URL or upload a project file"
-      };
-    }
-
-    const team = await Team.findById(teamId);
-    if (!team) {
-      return {
-        message: "",
-        error: "Team not found"
       };
     }
 

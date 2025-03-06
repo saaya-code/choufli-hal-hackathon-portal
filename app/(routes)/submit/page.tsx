@@ -72,6 +72,15 @@ const formSchema = z
     }
   );
 
+// New schema for presentation URL only
+const presentationSchema = z.object({
+  teamId: z.string(),
+  presentationUrl: z
+    .string()
+    .url("Please enter a valid URL")
+    .min(1, "Presentation URL is required"),
+});
+
 const teamIdSchema = z.object({
   teamId: z.string().min(1, "Team ID is required"),
 });
@@ -142,7 +151,8 @@ export default function SubmitPage() {
   const [teamInfo, setTeamInfo] = useState<any>(null);
 
   const [state, formAction, pending] = useActionState(
-    submitProject,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (prevState: any, formData: any) => submitProject(formData as FormData),
     initialState
   );
 
@@ -170,6 +180,15 @@ export default function SubmitPage() {
       presentationUrl: "",
     },
     context: { hasFile: Boolean(file) },
+  });
+
+  // New form for presentation URL only submissions
+  const presentationForm = useForm<z.infer<typeof presentationSchema>>({
+    resolver: zodResolver(presentationSchema),
+    defaultValues: {
+      teamId: teamId || "",
+      presentationUrl: "",
+    },
   });
 
   const watchedValues = form.watch();
@@ -335,6 +354,52 @@ export default function SubmitPage() {
     return formAction(submitFormData);
   }
 
+  // New function to handle presentation URL submission when submissions are closed
+  async function onPresentationSubmit(
+    values: z.infer<typeof presentationSchema>
+  ) {
+    if (!teamId) {
+      toast({
+        variant: "destructive",
+        title: "Team ID Required",
+        description: "Please provide a valid team ID",
+      });
+      return;
+    }
+
+    const submitFormData = new FormData();
+    submitFormData.append("teamId", values.teamId);
+    submitFormData.append("presentationUrl", values.presentationUrl);
+    submitFormData.append("presentationOnly", "true"); // Flag to indicate this is a presentation-only submission
+
+    try {
+      const result = await submitProject(submitFormData);
+      if (result.message && !result.error) {
+        toast({
+          title: "Success!",
+          description: "Your presentation URL has been submitted successfully.",
+        });
+        presentationForm.reset({
+          teamId: values.teamId,
+          presentationUrl: "",
+        });
+      } else if (result.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error || "Failed to submit presentation URL",
+        });
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred",
+      });
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background py-20">
       <div className="container max-w-2xl relative">
@@ -401,19 +466,87 @@ export default function SubmitPage() {
               </AlertDescription>
             </Alert>
           ) : !isSubmissionActive ? (
-            <div className="text-center p-8">
+            <div className="text-center p-6">
               <AlertCircle className="h-16 w-16 mx-auto text-amber-500 mb-4" />
               <h2 className="text-2xl font-bold text-primary mb-4">
-                Submission{" "}
-                {submissionStatus.status === "not_started"
-                  ? "Not Started Yet"
-                  : "Closed"}
+                Main Submission Period Closed
               </h2>
               <p className="text-muted-foreground mb-6">
                 {submissionStatus.message}
               </p>
+
+              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-md mb-6 text-left">
+                <p className="text-blue-800">
+                  <strong>Good news:</strong> You can still submit or update
+                  your presentation URL below.
+                </p>
+              </div>
+
+              {teamInfo && (
+                <Alert className="mb-6 bg-primary/10 border-primary/20">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  <AlertTitle>Team Validated</AlertTitle>
+                  <AlertDescription>
+                    Submitting for team: <strong>{teamInfo.name}</strong>
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <div className="border rounded-md p-6 mb-6">
+                <h3 className="text-lg font-medium mb-4">
+                  Presentation URL Submission
+                </h3>
+
+                <Form {...presentationForm}>
+                  <form
+                    onSubmit={presentationForm.handleSubmit(
+                      onPresentationSubmit
+                    )}
+                    className="space-y-6"
+                  >
+                    <input type="hidden" name="teamId" value={teamId || ""} />
+
+                    <FormField
+                      control={presentationForm.control}
+                      name="presentationUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Presentation URL</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="https://figma.com/file/... or https://slides.google.com/..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Link to your Figma design, Google Slides, or any
+                            other presentation
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={!presentationForm.formState.isValid}
+                    >
+                      {presentationForm.formState.isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Submitting...
+                        </>
+                      ) : (
+                        "Submit Presentation URL"
+                      )}
+                    </Button>
+                  </form>
+                </Form>
+              </div>
+
               <Link href="/">
-                <Button>Return to Home</Button>
+                <Button variant="outline">Return to Home</Button>
               </Link>
             </div>
           ) : (
