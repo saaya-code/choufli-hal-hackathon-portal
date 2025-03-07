@@ -5,9 +5,15 @@ export interface EmailOptions {
     subject: string;
     message: string;
     isHtml?: boolean;
+    attachments?: Array<{
+      filename: string;
+      content?: Buffer;
+      path?: string;
+      contentType?: string;
+    }>;
 }
 
-export async function sendEmail({ to, subject, message, isHtml = false }: EmailOptions) {
+export async function sendEmail({ to, subject, message, isHtml = false, attachments = [] }: EmailOptions) {
    try {
        const transporter = nodemailer.createTransport({
          service: "gmail",
@@ -24,6 +30,7 @@ export async function sendEmail({ to, subject, message, isHtml = false }: EmailO
          to,
          subject,
          [isHtml ? "html" : "text"]: message,
+         attachments,
        };
    
        await transporter.sendMail(mailOptions);
