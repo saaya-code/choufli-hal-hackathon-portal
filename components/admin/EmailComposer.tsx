@@ -34,6 +34,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type EmailComposerProps = {
   selectedTeams: string[];
@@ -75,6 +76,7 @@ export function EmailComposer({
   const [isHtmlMode, setIsHtmlMode] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [includeCertificates, setIncludeCertificates] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [textareaCursorPos, setTextareaCursorPos] = useState<number | null>(
@@ -104,6 +106,7 @@ export function EmailComposer({
         message: values.message,
         isHtml: true,
         useTemplateVars: true,
+        includeCertificates: includeCertificates,
       });
 
       if (result.success) {
@@ -112,6 +115,7 @@ export function EmailComposer({
           true,
           `Email sent successfully to ${selectedTeams.length} teams!`
         );
+        setIncludeCertificates(false);
       } else {
         onEmailSent(false, result.error || "Failed to send email");
       }
@@ -150,6 +154,62 @@ export function EmailComposer({
     } else {
       form.setValue("message", message + " " + variable);
     }
+  };
+
+  const setupCertificateTemplate = () => {
+    form.setValue(
+      "subject",
+      "Thank You & Certificate of Participation: Choufli Hal 2.0"
+    );
+    form.setValue(
+      "message",
+      `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+      <div style="background-color: #E6EFFF; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <img src="https://gdg-on-campus-issatso.tn/logo.png" alt="Choufli Hal 2.0 Logo" style="max-width: 200px; height: auto;">
+      </div>
+      <div style="padding: 20px;">
+        <h1 style="color: #8B3E16; font-size: 24px; margin-bottom: 20px;">Thank You, {{memberName}}!</h1>
+        
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          Thank you for your participation in the <strong>Choufli Hal 2.0 Hackathon</strong>! We were thrilled to have you and your team, <strong>{{teamName}}</strong>, join us for this event.
+        </p>
+        
+        <div style="background-color: #FFF5E6; border-left: 4px solid #8B3E16; padding: 15px; margin-bottom: 20px;">
+          <h3 style="color: #8B3E16; margin-top: 0; margin-bottom: 10px;">Your Certificate of Participation</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.5;">
+            We're pleased to present you with your personalized Certificate of Participation for the Choufli Hal 2.0 Hackathon. You'll find it attached to this email.
+          </p>
+        </div>
+        
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          We hope you enjoyed the experience and learned valuable skills. Your feedback is extremely important to us as we strive to improve future events.
+        </p>
+        
+        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+          <h3 style="color: #8B3E16; margin-top: 0; margin-bottom: 10px;">Please Share Your Feedback</h3>
+          <p style="margin: 0 0 15px 0; font-size: 16px;">
+            We'd appreciate if you could take a few minutes to complete our feedback form:
+          </p>
+          <a href="https://forms.gle/1agdasxYbhwsDLej6" style="display: inline-block; background-color: #4285F4; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-weight: bold;">Complete Feedback Form</a>
+        </div>
+        
+        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          We hope to see you at future events! Stay connected with us on our social media channels for updates on upcoming activities.
+        </p>
+        
+        <p style="font-size: 16px; line-height: 1.5;">
+          Best regards,<br>
+          Google Developer Group On Campus ISSAT Sousse
+        </p>
+      </div>
+      <div style="background-color: #F5F5F5; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px;">
+        <p>&copy; 2025 Choufli Hal Bootcamp 2.0. All rights reserved.</p>
+      </div>
+    </div>`
+    );
+    setIsHtmlMode(true);
+    setIncludeCertificates(true);
+    form.clearErrors();
   };
 
   return (
@@ -317,6 +377,22 @@ export function EmailComposer({
                 ))}
               </TooltipProvider>
             </div>
+          </div>
+
+          <div className="flex items-center space-x-2 my-4">
+            <Checkbox
+              id="include-certificates"
+              checked={includeCertificates}
+              onCheckedChange={(checked) =>
+                setIncludeCertificates(checked === true)
+              }
+            />
+            <label
+              htmlFor="include-certificates"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Include personalized certificates of participation
+            </label>
           </div>
 
           <div className="flex items-center justify-between pt-4">
@@ -633,6 +709,13 @@ export function EmailComposer({
             }}
           >
             Team ID Template
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={setupCertificateTemplate}
+          >
+            Feedback & Certificate
           </Button>
         </div>
       </div>
