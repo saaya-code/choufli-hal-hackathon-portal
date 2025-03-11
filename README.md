@@ -17,7 +17,7 @@ A modern, feature-rich hackathon registration portal built for Google Developer 
 
 ## 🛠️ Technologies
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
 - **Authentication**: [NextAuth.js](https://next-auth.js.org/)
